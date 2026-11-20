@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ders kitabı hata tespiti projesi için vize çalışma defteri">
+<title>Ders Kitabı Projesi Vizesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Düzen: çalışma defteri — üstte yapışkan bölüm çubuğu, tek sütun okuma alanı, fosforlu kalemle vurgulanan sayılar */
+:root {
+  --kagit: #f7f8fb;
+  --yuzey: #ffffff;
+  --yuzey-2: #eef1f7;
+  --murekkep: #1b2340;
+  --soluk: #5a6382;
+  --cizgi: #d9deea;
+  --mavi: #2f4fd8;
+  --mavi-yumusak: #e3e8fc;
+  --fosfor: #ffe45c;
+  --fosfor-metin: #1b2340;
+  --iyi: #1f8a55;
+  --iyi-yumusak: #def3e8;
+  --kotu: #c23b3b;
+  --kotu-yumusak: #fbe4e4;
+  --uyari: #9a6a00;
+  --uyari-yumusak: #fff2cc;
+  --f-baslik: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-metin: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-kod: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --kagit: #12162a; --yuzey: #1a1f38; --yuzey-2: #222846; --murekkep: #e6e9f5; --soluk: #a1a8c6;
+    --cizgi: #2f365a; --mavi: #8fa4ff; --mavi-yumusak: #26305c; --fosfor: #e8cf3f; --fosfor-metin: #12162a;
+    --iyi: #5fd39a; --iyi-yumusak: #183a2c; --kotu: #ff8a8a; --kotu-yumusak: #43202a; --uyari: #f0c454; --uyari-yumusak: #3d3315;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --kagit: #12162a; --yuzey: #1a1f38; --yuzey-2: #222846; --murekkep: #e6e9f5; --soluk: #a1a8c6;
+  --cizgi: #2f365a; --mavi: #8fa4ff; --mavi-yumusak: #26305c; --fosfor: #e8cf3f; --fosfor-metin: #12162a;
+  --iyi: #5fd39a; --iyi-yumusak: #183a2c; --kotu: #ff8a8a; --kotu-yumusak: #43202a; --uyari: #f0c454; --uyari-yumusak: #3d3315;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--kagit); color: var(--murekkep);
+  font-family: var(--f-metin); font-size: 17px; line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--yuzey); }
+a { color: var(--mavi); }
+:focus-visible { outline: 3px solid var(--mavi); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--f-baslik); text-wrap: balance; line-height: 1.15; margin: 0; }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.1rem); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.2rem; font-weight: 700; }
+p { margin: 0; }
+code, .kod { font-family: var(--f-kod); font-size: 0.86em; }
+code { background: var(--yuzey-2); padding: 0.1em 0.35em; border-radius: 4px; }
+mark, .f { background: linear-gradient(transparent 12%, var(--fosfor) 12%, var(--fosfor) 88%, transparent 88%); color: var(--fosfor-metin); padding: 0 0.15em; font-weight: 700; }
+
+.cerceve { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.ic { max-width: 920px; margin: 0 auto; }
+
+/* üst çubuk */
+.ust { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--yuzey); border-bottom: 1px solid var(--cizgi); }
+.ust .ic { display: flex; gap: 6px; align-items: center; overflow-x: auto; padding-block: 10px; scrollbar-width: thin; }
+.ust a { flex: none; text-decoration: none; color: var(--soluk); font-weight: 600; font-size: 0.92rem; padding: 6px 12px; border-radius: 999px; }
+.ust a:hover { background: var(--yuzey-2); color: var(--murekkep); }
+.ust a.marka { color: var(--murekkep); font-family: var(--f-baslik); font-weight: 800; padding-left: 0; margin-right: 6px; }
+
+/* giriş */
+.giris { padding-block: 48px 32px; }
+.giris .etiket { font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mavi); font-weight: 700; }
+.giris h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800; letter-spacing: -0.02em; margin-top: 10px; max-width: 18ch; }
+.giris .alt { margin-top: 16px; max-width: 62ch; color: var(--soluk); font-size: 1.1rem; }
+.otuz { margin-top: 28px; background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 22px 24px; display: grid; gap: 10px; }
+.otuz .baslik { font-family: var(--f-baslik); font-weight: 700; font-size: 1.05rem; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.otuz .baslik span { font-family: var(--f-metin); font-weight: 400; color: var(--soluk); font-size: 0.9rem; }
+.otuz p { max-width: 70ch; }
+
+section { padding-block: 44px; border-top: 1px solid var(--cizgi); scroll-margin-top: 64px; }
+.bolum-bas { display: grid; gap: 8px; margin-bottom: 24px; }
+.bolum-bas p { color: var(--soluk); max-width: 64ch; }
+
+/* boru hattı */
+.hat { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; align-items: stretch; }
+.hat .adim { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.hat .adim b { font-family: var(--f-baslik); font-size: 1rem; }
+.hat .adim small { color: var(--soluk); font-size: 0.88rem; line-height: 1.45; }
+.hat .adim .no { font-family: var(--f-kod); font-size: 0.75rem; color: var(--mavi); }
+@media (max-width: 720px) { .hat { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 440px) { .hat { grid-template-columns: 1fr; } }
+
+/* sekmeler */
+.sekmeler { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.sekme { font: inherit; font-weight: 700; font-size: 0.95rem; border: 1px solid var(--cizgi); background: var(--yuzey); color: var(--murekkep); padding: 8px 14px; border-radius: 10px; cursor: pointer; display: grid; text-align: left; line-height: 1.2; }
+.sekme small { font-weight: 400; color: var(--soluk); font-size: 0.78rem; }
+.sekme[aria-selected="true"] { background: var(--mavi); border-color: var(--mavi); color: #fff; }
+.sekme[aria-selected="true"] small { color: rgba(255,255,255,0.85); }
+:root[data-theme="dark"] .sekme[aria-selected="true"], :root[data-theme="dark"] .sekme[aria-selected="true"] small { color: var(--kagit); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sekme[aria-selected="true"], :root:not([data-theme="light"]) .sekme[aria-selected="true"] small { color: var(--kagit); } }
+.panel { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 24px; display: grid; gap: 20px; }
+.panel .ozet { font-size: 1.08rem; max-width: 68ch; }
+.blok { display: grid; gap: 8px; }
+.blok h4 { margin: 0; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mavi); font-family: var(--f-metin); }
+.blok ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.sayilar { display: flex; flex-wrap: wrap; gap: 8px; }
+.sayi { background: var(--yuzey-2); border-radius: 8px; padding: 6px 10px; font-size: 0.92rem; }
+.sayi b { font-family: var(--f-kod); font-variant-numeric: tabular-nums; }
+.sorun { border-left: 4px solid var(--kotu); background: var(--kotu-yumusak); padding: 12px 14px; border-radius: 0 10px 10px 0; display: grid; gap: 4px; }
+.sorun b { color: var(--kotu); }
+pre.kodblok { margin: 0; background: var(--yuzey-2); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font-family: var(--f-kod); font-size: 0.82rem; line-height: 1.5; }
+
+/* kriterler */
+.kriterler { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 720px) { .kriterler { grid-template-columns: 1fr; } }
+.kriter { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.kriter dl { margin: 0; display: grid; gap: 8px; }
+.kriter dt { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--soluk); font-weight: 700; }
+.kriter dd { margin: 0; }
+.durum { justify-self: start; font-size: 0.8rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.durum.iyi { background: var(--iyi-yumusak); color: var(--iyi); }
+.durum.orta { background: var(--uyari-yumusak); color: var(--uyari); }
+.durum.zayif { background: var(--kotu-yumusak); color: var(--kotu); }
+
+/* sayı tablosu */
+.tablo-kap { overflow-x: auto; border: 1px solid var(--cizgi); border-radius: 12px; background: var(--yuzey); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.95rem; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--cizgi); vertical-align: top; }
+th { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--soluk); background: var(--yuzey-2); }
+tr:last-child td { border-bottom: 0; }
+td.n { font-family: var(--f-kod); font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+.hata-tablo { min-width: 760px; }
+.hata-tablo td:nth-child(2) { font-weight: 600; }
+
+/* sözlük */
+.sozluk { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 720px) { .sozluk { grid-template-columns: 1fr; } }
+.terim { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 16px; display: grid; gap: 6px; min-width: 0; }
+.terim b { font-family: var(--f-baslik); font-size: 1.02rem; }
+.terim .ornek { color: var(--soluk); font-size: 0.92rem; }
+
+/* soru bankası */
+.arac { display: grid; gap: 12px; margin-bottom: 18px; }
+.arac-satir { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.cip { font: inherit; font-size: 0.88rem; font-weight: 600; border: 1px solid var(--cizgi); background: var(--yuzey); color: var(--murekkep); padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.cip[aria-pressed="true"] { background: var(--murekkep); color: var(--kagit); border-color: var(--murekkep); }
+.ara { flex: 1 1 220px; min-width: 0; font: inherit; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--cizgi); background: var(--yuzey); color: var(--murekkep); }
+.dugme { font: inherit; font-weight: 700; font-size: 0.9rem; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--mavi); background: var(--mavi); color: #fff; cursor: pointer; }
+.dugme.ikincil { background: var(--yuzey); color: var(--mavi); }
+:root[data-theme="dark"] .dugme:not(.ikincil) { color: var(--kagit); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dugme:not(.ikincil) { color: var(--kagit); } }
+.ilerleme { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--soluk); }
+.cubuk { flex: 1; height: 8px; background: var(--yuzey-2); border-radius: 999px; overflow: hidden; }
+.cubuk span { display: block; height: 100%; background: var(--iyi); width: 0; transition: width 0.3s; }
+.sorular { display: grid; gap: 10px; }
+.soru { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; overflow: hidden; }
+.soru.bilinen { border-color: var(--iyi); }
+.soru-bas { width: 100%; font: inherit; text-align: left; background: none; border: 0; color: var(--murekkep); padding: 14px 16px; cursor: pointer; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; }
+.soru-bas .kat { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mavi); background: var(--mavi-yumusak); padding: 2px 8px; border-radius: 6px; white-space: nowrap; margin-top: 3px; }
+.soru-bas .q { font-weight: 700; }
+.soru-bas .ok { color: var(--soluk); transition: transform 0.2s; margin-top: 2px; }
+.soru[open-q] .soru-bas .ok { transform: rotate(90deg); }
+.cevap { padding: 0 16px 16px; display: grid; gap: 12px; }
+.cevap p { max-width: 70ch; }
+.cevap .alt-dugmeler { display: flex; gap: 8px; flex-wrap: wrap; }
+.bos { padding: 24px; text-align: center; color: var(--soluk); background: var(--yuzey); border: 1px dashed var(--cizgi); border-radius: 12px; }
+@media (max-width: 480px) { .soru-bas { grid-template-columns: 1fr auto; } .soru-bas .kat { grid-column: 1 / -1; justify-self: start; } }
+
+/* rastgele soru */
+.kart-modu { background: var(--yuzey); border: 2px solid var(--mavi); border-radius: 14px; padding: 22px; display: grid; gap: 14px; margin-bottom: 18px; }
+.kart-modu .q { font-family: var(--f-baslik); font-size: 1.3rem; font-weight: 700; }
+
+/* yapay zeka ve zayıf noktalar */
+.iki { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 720px) { .iki { grid-template-columns: 1fr; } }
+.not-kutu { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.not-kutu ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.zayif { display: grid; gap: 10px; }
+.zayif .z { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 16px; display: grid; gap: 6px; }
+.zayif .z b { font-family: var(--f-baslik); }
+.zayif .z .soyle { border-left: 3px solid var(--iyi); padding-left: 10px; }
+.uyari-not { background: var(--uyari-yumusak); color: var(--murekkep); border-radius: 10px; padding: 10px 14px; font-size: 0.93rem; }
+.uyari-not b { color: var(--uyari); }
+footer { padding-block: 36px 56px; color: var(--soluk); font-size: 0.9rem; border-top: 1px solid var(--cizgi); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+
+/* v7: hatırlatıcı, hata hikâyeleri, kod kartları */
+.hatirla { background: var(--mavi-yumusak); border-radius: 8px; padding: 8px 10px; font-size: 0.93rem; }
+.hatirla::before { content: "Akılda tut · "; font-weight: 700; color: var(--mavi); }
+.kurallar { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px; margin-bottom: 22px; }
+.kural { background: var(--iyi-yumusak); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+.kural b { font-family: var(--f-baslik); color: var(--iyi); }
+.kural span { font-size: 0.9rem; }
+.hikayeler { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 28px; }
+@media (max-width: 720px) { .hikayeler { grid-template-columns: 1fr; } }
+.hikaye { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.hikaye .ust-satir { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.hikaye .lakap { font-family: var(--f-baslik); font-weight: 800; font-size: 1.12rem; }
+.hikaye .hf { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mavi); background: var(--mavi-yumusak); padding: 2px 8px; border-radius: 6px; }
+.hikaye dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; font-size: 0.95rem; }
+.hikaye dt { font-weight: 700; color: var(--soluk); font-size: 0.85rem; padding-top: 1px; }
+.hikaye dd { margin: 0; }
+.hikaye .ders { border-left: 3px solid var(--iyi); padding-left: 10px; font-size: 0.93rem; }
+.kodlar { display: grid; gap: 18px; }
+.kod-kart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 20px; display: grid; gap: 12px; min-width: 0; }
+.kod-kart .ust-satir { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.kod-kart h3 { font-size: 1.15rem; }
+.kod-kart .hf { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mavi); background: var(--mavi-yumusak); padding: 2px 8px; border-radius: 6px; }
+.kod-ikili { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .kod-ikili { grid-template-columns: 1fr; } }
+.kod-ikili > div { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.kod-ikili .etk { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--soluk); }
+pre.sozde { border-left: 4px solid var(--mavi); background: var(--mavi-yumusak); }
+pre.kendin { border-left: 4px solid var(--iyi); background: var(--iyi-yumusak); }
+.ezber { background: var(--fosfor); color: var(--fosfor-metin); border-radius: 8px; padding: 8px 12px; font-weight: 700; justify-self: start; max-width: 100%; }
+.kod-kart details summary { cursor: pointer; font-weight: 700; color: var(--mavi); }
+.kod-kart details[open] summary { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+
+<nav class="ust cerceve" aria-label="Bölümler">
+  <div class="ic">
+    <a class="marka" href="#ozet">Vize defteri</a>
+    <a href="#haftalar">Haftalar</a>
+    <a href="#kriterler">Kriterler</a>
+    <a href="#surec">Süreç ve STLC</a>
+    <a href="#secimler">Model seçimleri</a>
+    <a href="#sayilar">Sayılar</a>
+    <a href="#hatalar">Hatalar ve çözümler</a>
+    <a href="#kodlar">Kodlar</a>
+    <a href="#kavramlar">Kavramlar</a>
+    <a href="#araclar">Araçlar</a>
+    <a href="#sorular">Soru bankası</a>
+    <a href="#yapayzeka">Yapay zekâ ve ben</a>
+    <a href="#zor">Zor sorular</a>
+  </div>
+</nav>
+
+<header class="cerceve giris" id="ozet">
+  <div class="ic">
+    <div class="etiket">Yazılım Geliştirme I · Proje vizesi çalışması</div>
+    <h1>Yapay Zekâ Destekli Ders Kitabı İnceleme Sistemi</h1>
+    <p class="alt">Haftalık raporlara (4, 5, 6 ve 8. haftalar) göre hazırlandı. Önce 30 saniyelik anlatımı ezberle, sonra haftalara ve soru bankasına geç. Sarı ile vurgulanan sayılar hocanın en çok soracağı yerler.</p>
+    <div class="otuz">
+      <div class="baslik">Projeyi 30 saniyede anlat <span>— ilk soru büyük ihtimalle bu</span></div>
+      <p>"Bir MEB ders kitabının PDF'ini alıp dört konuda olası hataları bulan bir sistem yaptık: <b>yazım ve noktalama</b>, <b>sınıf düzeyine göre okunması ağır paragraflar</b>, <b>kitabın kendi içindeki bilgi çelişkileri</b> ve <b>müfredattaki anahtar kavramların kitapta geçip geçmediği</b>. Her tespit sayfa ve paragraf numarası, açıklama ve güven skoruyla geliyor; kesin hata değil, editöre öneri. Sonuçlar tarayıcıda açılan bir programda, kitabın kendi PDF'ine eklenen notlarda ve Excel raporunda görünüyor. Dil modelleri bilgisayarda yerel çalışıyor, kitap dışarı gönderilmiyor. Her özelliği ölçtük; yazım denetimini de sistemi yazmayan üç yapay zekâdan oluşan bir kurulla bağımsız olarak ölçtük."</p>
+    </div>
+  </div>
+</header>
+
+<section class="cerceve" aria-labelledby="hat-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="hat-b">Sistem nasıl çalışıyor?</h2>
+      <p>Bir kitap sisteme girdiğinde sırayla bu adımlardan geçer. Hoca "akışı anlat" derse bu sırayla git.</p>
+    </div>
+    <div class="hat">
+      <div class="adim"><span class="no">1 · pdf_cikarma.py</span><b>PDF'i okuma</b><small>PyMuPDF metni bloklara böler: sayfa no, paragraf no, konum (bbox), metin ve tür (paragraf, kısa, bozuk, simge). Satır satır okunan metin birleştirilir.</small></div>
+      <div class="adim"><span class="no">2 · kriterler/</span><b>Dört kriter</b><small>Okunabilirlik, yazım (+ kesme), tutarlılık, müfredat. Her biri <code>Tespit</code> üretir: yer, açıklama, güven skoru.</small></div>
+      <div class="adim"><span class="no">3 · dusuk_oncelik, yazim_hakem</span><b>Yanlış alarmı azaltma</b><small>Alıntı, terim, PDF'ten bozuk okunan parça tanınır; dil modeli hakemi sorulur. Tespit silinmez, sebebiyle alta iner.</small></div>
+      <div class="adim"><span class="no">4 · çıktılar</span><b>Editöre sunma</b><small>İnceleme sayfası, kitabın PDF'ine notlar, Excel raporu; hepsi INCELE.bat ile açılan tarayıcı programında.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="haftalar" aria-labelledby="haftalar-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="haftalar-b">Hafta hafta ne yaptık?</h2>
+      <p>Her sekmede: o haftanın hedefi, yapılanlar, ezberlenecek sayılar ve karşılaşılan problem. Raporlar Word dosyalarında 2, 3, 6 ve 8 numaralı; derste 4, 5, 6 ve 8. haftalara karşılık geliyor.</p>
+    </div>
+    <div class="sekmeler" role="tablist" aria-label="Haftalar">
+      <button class="sekme" role="tab" id="t-bas" aria-controls="p-bas" aria-selected="false">Başlangıç<small>ilk rapor · 13 Ekim</small></button>
+      <button class="sekme" role="tab" id="t-4" aria-controls="p-4" aria-selected="true">Hafta 4<small>Faz 1 tamam · 21 Ekim</small></button>
+      <button class="sekme" role="tab" id="t-5" aria-controls="p-5" aria-selected="false">Hafta 5<small>Faz 2 + müfredat · 27 Ekim</small></button>
+      <button class="sekme" role="tab" id="t-6" aria-controls="p-6" aria-selected="false">Hafta 6<small>demo hatası · 3 Kasım</small></button>
+      <button class="sekme" role="tab" id="t-8" aria-controls="p-8" aria-selected="false">Hafta 8<small>model + bağımsız ölçüm · 10 Kasım</small></button>
+      <button class="sekme" role="tab" id="t-son" aria-controls="p-son" aria-selected="false">Son durum<small>raporlardan sonra · 16 Kasım</small></button>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-bas" aria-labelledby="t-bas" hidden>
+      <p class="ozet">Temel atıldı: proje kapsamı, Faz 1 yol haritası ve 13 teknik karar (dil, PDF kütüphanesi, morfoloji aracı, LLM seçimi, güven skoru, test seti…). PDF'ten metin çıkarma ve ilk kriter olan okunabilirlik yazıldı.</p>
+      <div class="blok"><h4>Yapılanlar</h4><ul>
+        <li><b>PDF'ten metin çıkarma:</b> her blok için sayfa no, paragraf no, konum ve metin. Basılı sayfa numarası da okunuyor.</li>
+        <li><b>Okunabilirlik:</b> üç Türkçe formül (Ateşman, Çetinkaya-Uzun, Bezirci-Yılmaz) akademik kaynaklardan doğrulanıp uygulandı. Kitap özeti + paragraf düzeyi: kitabın en zor %10'u ve en az iki formülün hemfikir olduğu paragraflar.</li>
+        <li><b>Blok türleri:</b> paragraf, kısa metin, bozuk, simge. Bloklar silinmiyor, her kriter yalnız kendine uygun bloğa bakıyor.</li>
+      </ul></div>
+      <div class="sayilar"><span class="sayi">6. sınıf kitabında formüllerle seviye üstü paragraf <b>%72</b></span><span class="sayi">Çetinkaya <b>%91</b> · Ateşman <b>%37</b></span><span class="sayi"><b>388</b> aday paragraftan <b>35</b> işaret, <b>22</b>'sinde üç formül hemfikir</span><span class="sayi">harita sayfasında <b>1.525</b> blok</span></div>
+      <div class="sorun"><b>Problem: gerçek kitapta PDF dağınık çıktı</b><span>Sayfa başına ~71 blok, haritada her il adı ayrı blok, bazı fontlarda Türkçe harfler okunamıyor ("Bast&#xFFFD;&#xFFFD;&#xFFFD;n"), sıra okuma sırası değil. Çözüm: bloklara tür verildi ve yukarıdan aşağıya, soldan sağa sıralandı.</span></div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-4" aria-labelledby="t-4">
+      <p class="ozet"><b>Faz 1 bitti.</b> Yazım ve bilgi tutarsızlığı kriterleri eklendi, üç kriter de bilerek hata eklenmiş test setleriyle ölçüldü. Yerel dil modeli (gemma4) ilk kez kullanıldı.</p>
+      <div class="blok"><h4>Yapılanlar</h4><ul>
+        <li><b>Yazım:</b> Hunspell, Zemberek, Starlang denendi. <b>Starlang ana denetçi, Zemberek ikinci görüş.</b> İkisi de "hata" derse güven 1, yalnız biri derse 0,5. Yanına 7 TDK kuralı (noktadan sonra boşluk, de/da ve mi yazımı, "ya da", "birçok" gibi bitişikler, "ve ve" tekrarı).</li>
+        <li><b>Bilgi tutarsızlığı:</b> anlamca benzer cümleler <b>bge-m3</b> (embedding) ile bulunuyor → <b>gemma4</b> çelişki var mı diye karar veriyor → <b>Turkish-Gemma</b> ikinci görüş. Model seçimi için 6 model 31 cümle çiftiyle yarıştırıldı.</li>
+        <li><b>Test setleri:</b> kitaplara bilerek 50 çelişki ve 80 yazım hatası eklendi. Bir kısmı geliştirme (ayar) için, kalanı kilitli test için; test seti en sonda bir kez çalıştırıldı.</li>
+        <li><b>Yazım hakemi:</b> dil modeli "bu kelime terim ya da alıntı, doğru" derse tespit silinmiyor, listenin altına iniyor.</li>
+        <li>Kitap sayısı 4'e çıktı (Sosyal Bilgiler 6, TDE 9, Biyoloji 10, Matematik 11). İnceleme sayfasına yazım ve tutarlılık sekmeleri; DEMO.bat 5 adım.</li>
+      </ul></div>
+      <div class="sayilar"><span class="sayi">yazım ilk deneme <b>623</b> → önlemlerle <b>77</b></span><span class="sayi">yazım testi <mark>56'da 55</mark></span><span class="sayi">tutarlılık <mark>35'te 27 (%77)</mark>, bulunanların hepsi doğru</span><span class="sayi">TDE sahte tespit <b>39 → 13</b></span><span class="sayi"><b>138</b> test</span><span class="sayi">tamamlanma <b>%40</b></span></div>
+      <div class="blok"><h4>Kitapta bulunan gerçek hatalar</h4><p>"kisisel gelisimimiz", "jandama", "kullanmışladır", "planınında".</p></div>
+      <div class="sorun"><b>Problem 1: doğru kelimeler hata sayılıyordu</b><span>Morfoloji araçları sözlükte olmayan her kelimeye hata diyor (özel ad, terim, eski yazım, bozuk PDF parçası). Matematik'te "trigonometrik" 139 kez. Çözüm: kitapta 3+ geçen kelime terim, büyük harfle başlayanlar atlandı, bozuk bloklar ayrıldı, dil modeli hakemi eklendi. Hakem "jandama"yı "jandarma" sandı → kitapta geçen bir kelimeye tek harf uzaksa düşürmeme kuralı.</span></div>
+      <div class="sorun"><b>Problem 2: ilk denemede 21 çelişki, neredeyse hepsi yanlış</b><span>Cümleler modele tek başına verilmişti; hangi ülke/iklim olduğu başlıkta yazıyordu. Doğru-yanlış etkinlikleri ve test şıkları bilerek yanlış. Çözüm: cümlenin geçtiği yer (başlık, paragraf, yönerge) de verildi; şıklar ve karakter konuşmaları iddia sayılmadı; Turkish-Gemma yalnız güveni artıran oy oldu.</span></div>
+      <div class="sorun"><b>Problem 3: bilgisayar çöktü</b><span>Ekran kartı belleği (VRAM) doldu, sürücü sıfırlandı, şarj çıkmıştı. Çözüm: <code>OLLAMA_BASLAT.bat</code> ekran kartında 1 GB boş bırakıyor, aynı anda tek model; <code>donanim.py</code> pil, sıcaklık ve RAM'e bakıp işi bekletiyor.</span></div>
+      <div class="blok"><h4>Rapordaki kod: iki modelin oyundan güven skoru · <a href="#kodlar">sözde kodu</a></h4>
+<pre class="kodblok">oylar = [iz[alan]["karar"] == "celiski" for alan in ("hakem", "ikinci_gorus")]
+if not oylar[0]:
+    continue
+iz["guven"] = 1.0 if all(oylar) else 0.5</pre>
+        <p>gemma4 "çelişki" demediyse çift atlanıyor (Turkish-Gemma tek başına dediğinde hepsi yanlıştı). İkisi de derse 1, yalnız gemma4 derse 0,5. Yazımdaki iki araç mantığıyla aynı.</p></div>
+      <div class="blok"><h4>Rapordaki ikinci kod (yapay zekâ kanıtları): yazım hatasını PDF'e not olarak çizmek</h4>
+<pre class="kodblok">def _yazim_notu(s: _Sayfalar, t: Tespit, dusuk: bool) -&gt; tuple[float, float]:
+    sayfa = s.sayfa(t.sayfa_no)
+    kutular = _kutular(parca_kutulari(_ham_kelimeler(s.kelimeler(t.sayfa_no), t.bbox), t.metin_parcasi or ""))
+    tur = "kelime" if t.alt_tur == "morfoloji" else f"TDK kuralı: {KURAL_ADLARI.get(t.alt_tur, t.alt_tur)}"
+    icerik = (f"{t.aciklama}\n\nKonum: {konum_metni(t.sayfa_no, t.basili_sayfa_no)}\n"
+              f"Güven: {guven_metni(t.guven_skoru)}\n\n{UYARI}")
+    renk = RENKLER["dusuk"] if dusuk else None
+    if kutular:
+        annot = sayfa.add_squiggly_annot(kutular)
+    else:  # kelime sayfada bulunamadı (PDF okuma farkı): bütün blok işaretlenir
+        kutular = [pymupdf.Rect(t.bbox) + (-2, -2, 2, 2)]
+        annot = sayfa.add_rect_annot(kutular[0])
+        annot.set_border(width=0.8, dashes=[2, 2])
+    _not(annot, "yazim", f"Yazım ({tur})", icerik, renk)
+    return kutular[0].x0, kutular[0].y0</pre>
+        <p><b>Ne yapıyor?</b> Bir yazım tespitini notlu PDF'e çiziyor.</p>
+        <ul>
+          <li>Hatalı kelimenin sayfadaki kutusunu (koordinatını) buluyor.</li>
+          <li><code>tur</code>: hata sözlükte olmayan bir kelime mi, yoksa bir TDK kuralı mı (ör. "de/da")?</li>
+          <li><code>icerik</code>: notun içine yazılacak metin: açıklama, sayfa, güven ve uyarı.</li>
+          <li>Kelime bulunduysa altına <b>dalgalı çizgi</b> (squiggly) çiziliyor. Bulunamadıysa (PDF metni ile görüntü farklıysa) bütün blok <b>kesikli çerçeveyle</b> işaretleniyor. Böylece hiçbir tespit kaybolmuyor.</li>
+          <li>Düşük öncelikli tespitler farklı renkte. Fonksiyon notun konumunu döndürüyor; çelişki çizgileri gibi başka çizimler bunu kullanıyor.</li>
+        </ul></div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-5" aria-labelledby="t-5" hidden>
+      <p class="ozet"><b>Faz 2 bitti, Faz 3 başladı.</b> Sonuçlar editörün kullandığı yere taşındı (PDF ve Excel), yanlış alarmlar dörtte birine indi, müfredat kontrolü eklendi.</p>
+      <div class="blok"><h4>Yapılanlar</h4><ul>
+        <li><b>Okunabilirlik yeniden ölçüldü:</b> Biyoloji 9-10-11 ve TDE 9-10-11. Formüller aynı dersin farklı sınıflarını da ayırt etmedi. Kelime sıklığı listesi ve dil modeline sınıf tahmini de denendi; model her kitaba "9. sınıf" dedi. Okunabilirlik "dilsel karmaşıklık uyarısı" olarak kaldı.</li>
+        <li><b>Notlu PDF:</b> yazım hatası kırmızı dalgalı çizgi, ağır paragraf turuncu çerçeve, çelişen iki cümle mor ve birbirine bağlı. Kitabın metni değişmiyor; her PDF okuyucuda açılıyor.</li>
+        <li><b>Excel raporu:</b> her satır bir tespit; editör "Hata / Hata değil / Emin değilim" seçince özet sayfası isabeti kendisi hesaplıyor; dolu dosya sisteme geri okunuyor.</li>
+        <li><b>Yanlış alarm azaltma:</b> alıntılar (imza satırı, tiyatro replikleri, kalın yazar adı), PDF'ten bozuk okunan parçalar ve kitabın sözlüğündeki terimler tanınıyor. Hiçbir tespit silinmiyor.</li>
+        <li><b>Satır birleştirme:</b> PDF bazı kutularda her satırı ayrı okuyordu; cümle ortasında biten satır alttakiyle birleştiriliyor.</li>
+        <li><b>Müfredat:</b> MEB'in yeni öğretim programları indirildi; öğrenme çıktısı, içerik çerçevesi ve anahtar kavramlar okunuyor. İki yöntem: dil modeline "bu çıktı kitapta işleniyor mu" diye sormak ve anahtar kavramların kitapta geçip geçmediğine bakmak.</li>
+      </ul></div>
+      <div class="sayilar"><span class="sayi">9 kitapta gösterilen yazım tespiti <mark>2.743 → 628</mark></span><span class="sayi">37 gerçek hatadan kayıp <mark>0</mark></span><span class="sayi">TDE 12'de <b>9.745</b> parçanın <b>2.551</b>'i öncekinin devamı</span><span class="sayi">müfredat ölçütü <b>0,85</b>, çıkan <mark>0,82</mark></span><span class="sayi">doğru sayfa <b>18/18</b></span><span class="sayi"><b>196</b> test · DEMO.bat <b>7 adım</b></span></div>
+      <div class="sorun"><b>Problem 1: iki gerçek hata yanlışlıkla alta indi</b><span>"sorumluklar" tamamı italik bir başlıktaydı, italik kelime terim sanıldı. "söyleyebillirsiniz" şiirin altındaydı, alıntı büyük boşluğu atlayıp normal metne uzamıştı. Çözüm: blok çoğunlukla italikse italik terim işareti sayılmadı; alıntı büyük boşlukta duruyor; hakeme hece tekrarı kontrolü ("olacacağını"). Test kitabını gördükten sonra düzelttiğimiz için bu ölçümün <b>temiz olmadığını</b> raporda yazdık.</span></div>
+      <div class="sorun"><b>Problem 2: satır satır okunan metin</b><span>Cümle satır başından başlayınca öznesi önceki satırda kalıyordu; yazımda satır başı ve sonu kelimeleri atlanıyordu. Çözüm: tek satırlık, çok yakın, hizalı, sütunu dolduran ve cümlesi yarım kalan satır alttakiyle birleşiyor; madde işaretiyle başlayan birleşmiyor. Sonuç: biyografi çelişkisi gitti, yeni gerçek hata bulundu: "hazılayabilirsiniz".</span></div>
+      <div class="sorun"><b>Problem 3: müfredatta dil modeli ölçütü geçemedi</b><span>Model en benzer paragraf olarak çoğu zaman tema kapağını buluyordu (kapakta programın içerik listesi aynen yazıyor). Kapak, içindekiler, tanıtım sayfaları çıkarıldı; karar hiç kullanılmamış <b>Biyoloji 11</b> ile verildi (temiz doğrulama). Doğru sayfa 18/18 ama karar zayıf: 22 çıktıdan 18'i (0,82 &lt; 0,85), çıkarılan temanın yalnız yarısına "yok". Önceden yazılan kurala uyuldu: ürüne yalnız <b>anahtar kavram kontrolü</b> girdi.</span></div>
+      <div class="blok"><h4>Anahtar kavram kontrolü ne buldu?</h4><p>Biyoloji 9'da "polimerizasyon" kavramı yalnız kapakta geçiyor. Sosyal Bilgiler 6 programın son üç öğrenme alanını kapsamıyor (o alanlar kitabın ikinci cildinde).</p></div>
+      <div class="blok"><h4>Rapordaki kod: iki satır aynı paragraf mı? · <a href="#kodlar">sözde kodu</a></h4>
+<pre class="kodblok">satir = a.bbox[3] - a.bbox[1]
+if satir &gt; _SATIR_YUKSEKLIGI_EN_FAZLA:
+    return False
+bosluk = b.bbox[1] - a.bbox[3]
+hizali = b.bbox[0] - 3 &lt;= a.bbox[0] &lt;= b.bbox[0] + 25
+dolu = a.bbox[2] &gt;= max(a.bbox[2], b.bbox[2]) - 15
+son = a.metin.rstrip()[-1:]
+yarim = b.metin.lstrip()[:1].islower() or ((son.islower() or son == ",") and len(a.metin.split()) &gt;= 5)
+return -2 &lt;= bosluk &lt;= 0.6 * satir and hizali and dolu and yarim and not _LISTE.match(b.metin)</pre>
+        <p><b>Ne yapıyor?</b> <code>a</code> üstteki, <code>b</code> alttaki metin parçası. <code>bbox</code> parçanın sayfadaki kutusu: [sol, üst, sağ, alt]. İki parça şu şartların hepsi tutarsa birleşiyor:</p>
+        <ul>
+          <li><code>satir</code>: üstteki parça tek satır mı? Çok yüksekse (iki satırlık kalın başlık gibi) hemen "hayır". Bu şart sonradan eklendi: başlık alttaki metne yapışıp yanlış çelişki çıkarmıştı.</li>
+          <li><code>bosluk</code>: alttaki satır çok yakın mı? Boşluk satır yüksekliğinin 0,6 katından az olmalı.</li>
+          <li><code>hizali</code>: iki satırın sol kenarı aynı hizada mı?</li>
+          <li><code>dolu</code>: üstteki satır sütunun sonuna kadar gidiyor mu? Kısa kalan satır genelde paragraf sonudur.</li>
+          <li><code>yarim</code>: cümle yarım mı kaldı? Alttaki küçük harfle başlıyorsa ya da üstteki virgül veya küçük harfle bitiyorsa evet.</li>
+          <li><code>_LISTE</code>: alttaki satır "a)" ya da madde işaretiyle başlıyorsa birleşmiyor.</li>
+        </ul></div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-6" aria-labelledby="t-6" hidden>
+      <p class="ozet">Kısa bir hafta. <b>Demoyu baştan sona çalıştırıp bir hafta fark edilmemiş bir çökme hatası bulduk ve düzelttik.</b></p>
+      <div class="blok"><h4>Ne oldu?</h4><ul>
+        <li>"Demo her şeyi gösteriyor mu?" diye sorunca demo Biyoloji 9 ile baştan sona denendi ve <b>3. adımda (yazım)</b> çöktü.</li>
+        <li>Sebep: demo fonksiyonunda düşük öncelikli tespitleri sayan değişkenin adı (<code>dusuk_oncelik</code>) kullanılan bir modülün adıyla aynıydı. Python fonksiyonda bir ada değer atandığını görünce o adı fonksiyonun tamamında yerel değişken sayıyor; yukarıdaki satır modülü değil, henüz değeri olmayan değişkeni gördü.</li>
+        <li>Hata 21 Ekim'den beri vardı; modüllerin testleri geçiyordu ama demo o tarihten sonra hiç uçtan uca çalıştırılmamıştı.</li>
+        <li>Düzeltme: değişken <code>dusuk_sayisi</code> yapıldı; demodaki hiçbir değişkenin bir modülle aynı adı taşımadığını kontrol eden test eklendi. Demo 7 adımı tamamladı.</li>
+      </ul></div>
+<pre class="kodblok">UnboundLocalError: cannot access local variable 'dusuk_oncelik'
+where it is not associated with a value</pre>
+      <div class="blok"><h4>Eklenen test · <a href="#kodlar">sözde kodu</a></h4>
+<pre class="kodblok">moduller = {ad for ad, deger in vars(demo).items()
+            if type(deger).__name__ == "module"}
+self.assertFalse(moduller &amp; set(demo.main.__code__.co_varnames))</pre>
+        <p><b>Ne yapıyor?</b> İlk satır demo dosyasında kullanılan modüllerin adlarını topluyor. <code>co_varnames</code>, <code>main</code> fonksiyonundaki yerel değişkenlerin adları. <code>&amp;</code> iki kümenin kesişimi; boş değilse bir değişken bir modülün adını taşıyor demektir ve test başarısız oluyor.</p></div>
+      <div class="blok"><h4>Ders</h4><p>Parçaları ayrı ayrı test etmek yetmiyor; her yeni özellikten sonra bütün sistem (demo) uçtan uca çalıştırılmalı. Commit: <code>12b606b</code>.</p></div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-8" aria-labelledby="t-8" hidden>
+      <p class="ozet"><b>Ürün gözüyle inceleme ve ilk bağımsız ölçüm.</b> Yazım modeli eğitildi (olumsuz), kesme denetimi eklendi, tarayıcıda açılan program yapıldı, yazımın gerçek başarısı sistemi yazmayan bir kurulla ölçüldü.</p>
+      <div class="blok"><h4>Yapılanlar</h4><ul>
+        <li><b>Yazım modeli:</b> BERTurk üzerine kelime kelime "doğru / hatalı" etiketleyen model. Veri: GECTurk + Vikipedi değişiklik geçmişinden ~28 bin gerçek "hata → düzeltme" cümlesi + kitap cümlelerine eklenen yapay hatalar; toplam ~205 bin cümle. Ölçüt eğitimden önce yazıldı.</li>
+        <li><b>Kesme işareti denetimi:</b> özel ada, kısaltmaya, sayıya gelen ekte eksik ve gereksiz kesme. Özel adı Zemberek tanıyor; yanlış alarmı azaltmak için kitabın aynı adı başka yerde kesmeyle yazmış olması şartı.</li>
+        <li><b>Program:</b> DEMO.bat yerine tarayıcıda açılan sade program (INCELE.bat). Dört ayrı yapay zekâ ajanı arayüzü inceledi, ortak bulgular düzeltildi. Doğru-yanlış etkinlik maddeleri tutarlılıkta artık karşılaştırılmıyor.</li>
+        <li><b>Kod ve yöntem incelemesi:</b> proje MEB'e sunulacak ürün gözüyle incelendi, bulgular düzeltildi.</li>
+        <li><b>Bağımsız değerlendirme:</b> ChatGPT, Gemini, DeepSeek'ten kurul. Sistemin çıktısı önceden kilitlendi; adaylar karışık sırada ve nereden geldiği gizli verildi; karar çoğunluk oyu (en az 2/3).</li>
+      </ul></div>
+      <div class="sayilar"><span class="sayi">model yapay hatalarda <b>0,91</b></span><span class="sayi">gerçek kitapta <mark>60'ta 1</mark> gerçek hata</span><span class="sayi">kesme <mark>46'da 31 (%67)</mark></span><span class="sayi">9 kitapta <b>51</b> kesme tespiti</span><span class="sayi">Fleiss κ <mark>0,33</mark></span><span class="sayi">1. ölçüm bulma <mark>6/17 (%35)</mark> (düzeltilmiş)</span><span class="sayi">isabet ≈ <mark>dörtte bir</mark></span><span class="sayi"><b>267</b> test · <b>41</b> commit · <b>%60</b></span></div>
+      <div class="sorun"><b>Problem 1: model yapayda iyi, gerçekte kötü</b><span>Eğitim verisindeki hatalar çoğunlukla yapaydı; gerçek kitapta araçların tanımadığı kelimeler ise terim, eski metin, özel ad, bozuk PDF kelimesi. 60 tespit olasılıklar görülmeden etiketlendi. Ürüne girmedi. Bulduğu tek gerçek hata "Türkistanda" bir kesme hatasıydı → sistemde kesme denetimi olmadığını gösterdi.</span></div>
+      <div class="sorun"><b>Problem 2: başarı sayıları bağımsız değildi</b><span>Etiketleri sistemi yazan yapay zekâ koymuştu, ölçümler yalnız bilerek eklenmiş hatalarla yapılmıştı. Çözüm: üç firmanın yapay zekâsından kurul, kilitli çıktı, gizli kaynak, çoğunluk oyu, Fleiss κ ile kurul uyumu.</span></div>
+      <div class="sorun"><b>Problem 3: "İ" harfi ve şişirilmiş ajan raporu</b><span>PDF'in metni bazı fontlarda "İ"yi "I" veriyor ("MEKANİZMALARI" basılıda doğru, metinde "MEKANIZMALARI"). Büyük harf kuralının bulduklarının çoğu ve ilk ölçümdeki 4 "gerçek hata" basılı sayfada yoktu → bulma 6/21 değil <b>6/17</b>. Ajanın raporu bulma oranını %90 civarı yazmıştı; ölçüm betiği kodu hiç çalıştırmıyordu, sonuç elle yazılmıştı. Kod çalıştırılınca %53–57 çıktı. Çözüm: PDF okuma yalnız yanlış "İ"leri düzeltecek şekilde değişti, şüpheli tespitlerin basılı sayfa görüntüsüne bakıldı, ölçümden önce kod sabitlendi (<code>854559a</code>).</span></div>
+      <div class="uyari-not"><b>Dikkat:</b> Rapor 8'de ajanın şişirdiği oran iki yerde farklı yazıyor (%90 → %57 ve %88 → %53). Sorulursa "ajan %90 civarı yazmıştı, kodu çalıştırınca %50'ler civarı çıktı" demen yeterli.</div>
+      <div class="blok"><h4>Öğrenilen: aynı kütüphanenin iki sürümü farklı sonuç verebilir</h4><p>PyMuPDF 1.27 ve 1.28 aynı PDF'i farklı bloklara böldü. Bu yüzden sürüm 1.28.2'ye sabitlendi; yanlış sürümle çalışılırsa program hata verip duruyor.</p></div>
+      <div class="blok"><h4>Rapordaki kod: kurulun ortak kararı · <a href="#kodlar">sözde kodu</a></h4>
+<pre class="kodblok">KURUL = ["chatgpt", "gemini", "deepseek"]
+def cogunluk(k):
+    c = Counter(oylar[a][k] for a in KURUL)
+    if c["HATA"] &gt;= 2: return "HATA"
+    if c["DEGIL"] &gt;= 2: return "DEGIL"
+    return "BELIRSIZ"</pre>
+        <p><b>Ne yapıyor?</b> Her aday için üç modelin oyunu sayıyor (<code>Counter</code>). En az iki model "hata" derse gerçek hata, en az iki model "hata değil" derse yanlış alarm; çoğunluk yoksa "belirsiz". Modeller adayın sistemden mi yoksa sayfa okumasından mı geldiğini görmedi (körlemesine).</p></div>
+      <div class="blok"><h4>Rapordaki ikinci kod (yapay zekâ kanıtları): PyMuPDF sürüm koruması</h4>
+<pre class="kodblok">_BEKLENEN_PYMUPDF_SURUMU = "1.28.2"
+if pymupdf.__version__ != _BEKLENEN_PYMUPDF_SURUMU:
+    raise RuntimeError(
+        f"PyMuPDF sürümü {pymupdf.__version__}; beklenen: {_BEKLENEN_PYMUPDF_SURUMU}. "
+        "Farklı PyMuPDF sürümleri blok bölütlemesini değiştirmektedir. "
+        "Lütfen D:\\derskitabı\\.venv\\Scripts\\python.exe kullanın.")</pre>
+        <p><b>Ne yapıyor?</b> Program açılırken yüklü PyMuPDF sürümüne bakıyor. 1.28.2 değilse hata verip duruyor ve hangi Python'un kullanılacağını söylüyor. <b>Neden?</b> 1.27 ve 1.28 aynı PDF'i farklı bloklara böldü; ölçüm hangi sürümle yapıldıysa ürün de o sürümle çalışmalı, yoksa ölçülen başarı geçerli olmaz.</p></div>
+      <div class="blok"><h4>Rapordaki hata mesajı: f-string</h4>
+<pre class="kodblok">File "bosluk_bak.py", line 20
+  p.get_pixmap(clip=r, dpi=300).save(f"{sys.argv[1]}/k42_{kitap}_{s}_{re.sub(r'\W','_',aranan)}.png")
+SyntaxError: f-string expression part cannot include a backslash</pre>
+        <p>Kaçan hataların basılı sayfa görüntüsünü alan betik hiç çalışmadı: Python'un bu sürümünde f-string'in süslü parantezi içinde ters bölü (<code>\W</code>) kullanılamıyor. Çözüm: <code>re.sub(...)</code> önce ayrı bir değişkende hesaplandı, f-string'e o değişken yazıldı.</p></div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-son" aria-labelledby="t-son" hidden>
+      <p class="ozet">Henüz rapora girmedi ama hoca "şu an ne durumda?" diye sorabilir. Amaç: yazımda <b>bulma oranını</b> artırmak.</p>
+      <div class="blok"><h4>Yapılanlar (11–16 Kasım)</h4><ul>
+        <li>İyileştirme planı: her kriter için fikirler eldeki veriyle sınandı, kanıtsızlar elendi.</li>
+        <li>Dokuz yeni dizgi ve noktalama kuralı, öncelik sırası düzeltmesi, eski metin sayfası ipucu.</li>
+        <li><b>Üçüncü bağımsız ölçüm</b> hiç görülmemiş iki kitapta (Biyoloji 12, İnkılap Tarihi 12): isabet <mark>%26 (20/76)</mark>, bulma <mark>27'de 1</mark>. Kurallar yeni kitapta genelleşmedi (aşırı uyum).</li>
+        <li>Yeni araç taraması (ön kayıtla, ayarsız): YTÜ COSMOS noktalama modeli, hunspell-tr, qwen3.5 kapandı; <b>gemma4 ile sayfa okuma</b> geçti.</li>
+        <li><b>Sayfa okuma</b> ürüne eklendi: yerel model sayfayı okuyup yazım ve noktalama önerisi yapıyor, sabit süzgeçlerden geçiyor, "kontrol edilecek" önceliğinde. Görülmüş sayfalarda 44 gerçek hatadan <b>15 → 26</b> (geliştirme verisi, şişkin; gerçek etkisi yeni kitapta ölçülecek).</li>
+      </ul></div>
+      <div class="sayilar"><span class="sayi"><b>307</b> test</span><span class="sayi">sayfa okuma ~<b>1 saat</b> / 300 sayfa</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="kriterler" aria-labelledby="kriter-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="kriter-b">Dört kriter tek bakışta</h2>
+      <p>Her kriter için: nasıl çalışıyor, hangi araçla, ne kadar iyi ve sınırı ne. "Bu kriter güvenilir mi?" sorusunun cevabı burada.</p>
+    </div>
+    <div class="kriterler">
+      <article class="kriter">
+        <h3>Yazım ve noktalama</h3>
+        <span class="durum orta">Üründe · isabet ~dörtte bir, bulma düşük</span>
+        <dl>
+          <dt>Nasıl</dt><dd>Kelime Starlang + Zemberek ile kök ve eklerine ayrılamıyorsa olası hata. Yanında TDK kuralları (boşluk, de/da, ki, bitişik yazımlar, kesme işareti…). Dil modeli hakemi terim ve alıntıları alta indiriyor.</dd>
+          <dt>Ölçüm</dt><dd>Eklenen hatalarda 56'da 55. Bağımsız kurulda işaretlenenlerin yaklaşık dörtte biri gerçek hata; kitabın doğal hatalarını bulma oranı düşük.</dd>
+          <dt>Sınır</dt><dd>Kendi başına doğru ama yanlış yerde kullanılmış kelimeleri ve eksik virgülleri kurallar bulamıyor.</dd>
+        </dl>
+      </article>
+      <article class="kriter">
+        <h3>Bilgi tutarsızlığı</h3>
+        <span class="durum iyi">Üründe · eklenenlerin %77'si, hepsi doğru</span>
+        <dl>
+          <dt>Nasıl</dt><dd>bge-m3 benzer cümleleri bulur → gemma4 çelişki mi diye karar verir (cümlenin geçtiği başlıkla) → Turkish-Gemma ikinci görüş.</dd>
+          <dt>Ölçüm</dt><dd>Eklenen 35 çelişkinin 27'si bulundu, bulunanların hepsi doğru.</dd>
+          <dt>Sınır</dt><dd>Yalnız kitabın <b>kendi içindeki</b> çelişkilere bakar; bilginin dünyada doğru olup olmadığını dış kaynakla kontrol etmez.</dd>
+        </dl>
+      </article>
+      <article class="kriter">
+        <h3>Okunabilirlik</h3>
+        <span class="durum zayif">Üründe · yalnız uyarı</span>
+        <dl>
+          <dt>Nasıl</dt><dd>Ateşman, Çetinkaya-Uzun, Bezirci-Yılmaz formülleri: kelime uzunluğu (hece) ve cümle uzunluğu. Kitabın en zor %10'u ve en az iki formülün hemfikir olduğu paragraflar.</dd>
+          <dt>Ölçüm</dt><dd>Formüller sınıf düzeyini ayırt etmedi: 11. sınıf Matematik 6. sınıftan kolay çıktı; Biyoloji ve TDE 9-10-11'de de ayırt etmedi.</dd>
+          <dt>Sınır</dt><dd>Yüzeysel ölçü; "dilsel karmaşıklık uyarısı", "buraya bir bakın" anlamında.</dd>
+        </dl>
+      </article>
+      <article class="kriter">
+        <h3>Müfredat uyumu</h3>
+        <span class="durum orta">Üründe · yalnız anahtar kavram</span>
+        <dl>
+          <dt>Nasıl</dt><dd>MEB öğretim programının anahtar kavramlarının kitapta geçip geçmediğine bakılır; program ve sınıf otomatik bulunur.</dd>
+          <dt>Ölçüm</dt><dd>Dil modeli yöntemi doğru sayfayı 18/18 buldu ama karar ölçütü geçemedi (0,82 &lt; 0,85) → ürüne girmedi.</dd>
+          <dt>Sınır</dt><dd>"Bu öğrenme çıktısı işleniyor mu" sorusu deneysel kaldı. Programı olan dersler: Biyoloji, Sosyal Bilgiler, TDE.</dd>
+        </dl>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="surec" aria-labelledby="surec-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="surec-b">Süreç: SDLC, geliştirme modeli ve STLC</h2>
+      <p><b>SDLC</b> (yazılım geliştirme yaşam döngüsü) yazılımın baştan sona nasıl geliştirildiğidir; <b>STLC</b> (yazılım test yaşam döngüsü) bunun içindeki test sürecidir. Hoca ikisinden birini sorabilir; ikisi de aşağıda.</p>
+    </div>
+
+    <div class="not-kutu" style="margin-bottom:16px">
+      <h3>Hangi geliştirme modelini izledik? Yinelemeli ve artımlı (iterative-incremental)</h3>
+      <p>Projeyi üç faza böldük, her hafta çalışan bir parça ekleyip ölçtük, sonuca göre bir sonraki adımı değiştirdik:</p>
+      <ul>
+        <li><b>Faz 1:</b> PDF okuma, okunabilirlik, yazım, tutarlılık + test setleri (başlangıç ve Hafta 4).</li>
+        <li><b>Faz 2:</b> editörün kullanacağı çıktılar (notlu PDF, Excel), yanlış alarmı azaltma (Hafta 5).</li>
+        <li><b>Faz 3:</b> müfredat, yazımı güçlendirme, bağımsız ölçüm, arayüz (Hafta 5–8 ve sonrası).</li>
+      </ul>
+      <p><b>Neden şelale (waterfall) değil?</b> Başta hangi aracın Türkçe ders kitabında işe yarayacağını bilmiyorduk; araştırma ağırlıklı bir projeydi. Sonuçlar yönümüzü birkaç kez değiştirdi: okunabilirlik formülleri sınıfı ayırt etmedi, müfredatta dil modeli ölçütü geçemedi, eğittiğimiz model gerçek kitapta başarısız oldu, bağımsız ölçüm bulma oranının düşük olduğunu gösterdi. Şelalede bu değişiklikler çok geç fark edilirdi. Her hafta çalışan bir demo olması da hocaya ilerlemeyi göstermeyi kolaylaştırdı.</p>
+      <p><b>V modeline benzeyen yanı:</b> her özelliğin başarı ölçütünü geliştirmeden önce yazdık (ön kayıt). Yani test planı geliştirmeyle aynı anda hazırlanıyordu.</p>
+      <p><b>Kararların kaydı:</b> her teknik karar alternatifleri, seçilme sebebi ve bedeliyle bir karar dosyasına yazıldı; her adım Git commit'iyle kaydedildi.</p>
+    </div>
+
+    <div class="not-kutu" style="margin-bottom:16px">
+      <h3>Karıştırılmaması gereken: iki ayrı döngü</h3>
+      <p><b>"Gereksinim analizi → planlama → tasarım → kodlama → test → dağıtım (→ bakım)"</b> sıralaması <b>SDLC</b>'dir, yani yazılımın bütün geliştirme süreci. <b>STLC</b> ise bu sıralamadaki <b>"test"</b> adımının kendi içindeki döngüsüdür ve aşamalarının hepsi testle ilgilidir.</p>
+      <p>Hoca "STLC" deyip tasarım-kodlama-dağıtım sıralamasını sorarsa, cevaba şöyle başlayabilirsin: "Bu sıralama SDLC'nin aşamaları. STLC, onun test adımının içindeki döngü. İkisini de anlatayım."</p>
+    </div>
+
+    <h3 style="margin:22px 0 12px">SDLC'nin aşamaları ve projede ne yaptık</h3>
+    <div class="tablo-kap">
+      <table class="hata-tablo">
+        <thead><tr><th>Aşama</th><th>Ne demek</th><th>Projede ne yaptık</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1. Gereksinim analizi</td><td>Problemi, kullanıcıyı ve sistemin ne yapması gerektiğini belirlemek</td><td>Problem: ders kitaplarındaki yazım, tutarlılık, okunabilirlik ve müfredat hatalarını elle bulmak çok zaman alıyor. Kullanıcı: kitabı inceleyen editör. İhtiyaçlar: hatanın sayfası ve yeri gösterilmeli, gerçek bir hata kaybolmamalı, kitap dışarı gönderilmemeli, sonuç editörün kullandığı PDF ve Excel'e çıkmalı.</td></tr>
+          <tr><td class="n">2. Planlama</td><td>İşi bölmek, zamanı, araçları ve riskleri belirlemek</td><td>İş üç faza bölündü; her hafta bir hedef ve rapor. Araç seçimleri alternatifleriyle karar dosyasına yazıldı. Donanım sınırı (dizüstü bilgisayar, ekran kartı belleği) baştan hesaba katıldı. Başarı ölçütleri denemeden önce yazıldı (ön kayıt).</td></tr>
+          <tr><td class="n">3. Tasarım</td><td>Sistemin yapısını, parçalarını ve veri akışını belirlemek</td><td>Boru hattı: PDF okuma → her kriter ayrı bir modül → tespitler tek listede birleşiyor → çıktılar (inceleme sayfası, notlu PDF, Excel). Tutarlılık için "benzer cümleleri bul, sonra dil modeli hakem olsun" tasarımı; güven için iki ayrı modelin hemfikirliği.</td></tr>
+          <tr><td class="n">4. Kodlama (geliştirme)</td><td>Tasarımı koda dökmek</td><td>Python ile yazıldı; her kriter kendi dosyasında. Her küçük adım ayrı bir Git commit'i oldu; kod testleriyle birlikte yazıldı. Kodu yapay zekâ ile birlikte yazdık; çıkan sonuçları ben kontrol ettim.</td></tr>
+          <tr><td class="n">5. Test</td><td>Sistemin doğru çalışıp çalışmadığını ölçmek</td><td>Bu adımın kendi döngüsü aşağıdaki STLC tablosunda: birim testleri, uçtan uca demo, gerileme testi, kilitli test seti, bağımsız kurul.</td></tr>
+          <tr><td class="n">6. Dağıtım</td><td>Sistemi kullanıcının çalıştırabileceği hâle getirmek</td><td>Çift tıklayınca çalışan DEMO.bat (7 adım), sonra tarayıcıda açılan sade program (INCELE.bat). Her şey bilgisayarda yerel çalışıyor, internet gerekmiyor.</td></tr>
+          <tr><td class="n">7. Bakım</td><td>Kullanımda çıkan hataları düzeltmek, sistemi geliştirmek</td><td>Örnek: 6. haftada demonun çöktüğü fark edildi, düzeltildi ve tekrarlanmasın diye test eklendi. Her düzeltmeden sonra bütün testler yeniden çalıştırıldı (gerileme testi).</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:8px;font-size:.9em;opacity:.8">Not: Kaynaklara göre SDLC 5, 6 ya da 7 aşama olarak sayılabiliyor. Bazı kaynaklar planlamayı gereksinimden önce yazıyor, bazıları bakımı ayrı bir aşama saymıyor. Hangi sırayla sorulursa sorulsun içerik aynı.</p>
+
+    <h3 style="margin:22px 0 12px">STLC'nin 6 aşaması ve projede ne yaptık</h3>
+    <div class="tablo-kap">
+      <table class="hata-tablo">
+        <thead><tr><th>Aşama</th><th>Ne demek</th><th>Projede ne yaptık</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1. Gereksinim analizi</td><td>Neyin test edileceğini ve neyin "doğru" sayılacağını belirlemek</td><td>Her kriter için soru: tespit doğru yeri gösteriyor mu (sayfa, paragraf), gerçek hatayı buluyor mu (bulma oranı), işaretledikleri gerçekten hata mı (isabet)? Ek şart: gerçek bir hata asla kaybolmamalı, tespitler silinmez.</td></tr>
+          <tr><td class="n">2. Test planlama</td><td>Ölçütleri, yöntemi, araçları ve veriyi önceden belirlemek</td><td>Ön kayıt: başarı eşiği denemeden önce yazıldı (müfredat ≥ 0,85; yazım modeli ölçütü eğitimden önce; bağımsız ölçümde sayfalar rastgele seçilip kilitlendi). Geliştirme seti / test seti ayrımı. Araçlar: unittest, değerlendirme betikleri, kurul.</td></tr>
+          <tr><td class="n">3. Test vakası geliştirme</td><td>Test edilecek örnekleri ve beklenen sonuçları hazırlamak</td><td>Birim testleri: içeriği bilinen yapay PDF, formüllerin elle hesaplanan değerleri. Test setleri: kitaplara bilerek 50 çelişki ve 80 yazım hatası eklendi; 128 tespit etiketlendi; alıntı ve yazım için körlemesine etiket setleri. Bağımsız ölçüm için kurul talimatı ve karışık sıralı aday listesi.</td></tr>
+          <tr><td class="n">4. Test ortamı kurulumu</td><td>Testin çalışacağı donanım, yazılım ve verinin hazırlanması</td><td>Projeye özel Python ortamı (.venv), PyMuPDF 1.28.2'ye sabitlendi (yanlış sürümde program duruyor). Ollama ekran kartında 1 GB boş bırakıyor, aynı anda tek model; Bekçi pil, sıcaklık, RAM kontrolü. Test kitapları MEB'den indirildi.</td></tr>
+          <tr><td class="n">5. Test yürütme</td><td>Testleri çalıştırmak, sonuçları ve hataları kaydetmek</td><td>Birim testleri her değişiklikte (49 → 267, hepsi geçiyor). Geliştirme setinde ayar, kilitli test setinde tek çalıştırma (56'da 55; 35'te 27). Demonun uçtan uca çalıştırılması. Bağımsız kurul oylaması. Ajan raporlarının kod yeniden çalıştırılarak doğrulanması.</td></tr>
+          <tr><td class="n">6. Test kapanışı</td><td>Sonuçları raporlamak, dersleri çıkarmak</td><td>Her ölçümün sonuç belgesi yazıldı; olumsuz sonuçlar da raporlandı (yazım modeli, müfredatta dil modeli, okunabilirlik). Ölçülen başarı ürünün içine yazıldı (rapor ve arayüzde "Ne kadar güvenilir?"). Haftalık raporlarda problem ve çözümler.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="iki" style="margin-top:16px">
+      <div class="not-kutu">
+        <h3>Kullandığımız test türleri</h3>
+        <ul>
+          <li><b>Birim testi:</b> her modülün parçaları (unittest; 267 test).</li>
+          <li><b>Entegrasyon / uçtan uca:</b> demonun 7 adımı bir kitapta arka arkaya. Hafta 6'daki hata burada çıktı.</li>
+          <li><b>Gerileme testi:</b> 56 eklenmiş yazım hatası; her değişiklikten sonra en az 55'i bulunmalı.</li>
+          <li><b>Kabul / bağımsız değerlendirme:</b> sistemi yazmayan kurul, hiç görülmemiş sayfalar.</li>
+          <li><b>Kara kutu ve körlemesine:</b> kurul ve etiketleyen, sistemin içini ve kararını görmeden değerlendirdi.</li>
+          <li><b>Kullanılabilirlik incelemesi:</b> arayüz dört ayrı yapay zekâ ajanına incelendi.</li>
+        </ul>
+      </div>
+      <div class="not-kutu">
+        <h3>Hata (defect) yaşam döngüsü: bir örnek</h3>
+        <ul>
+          <li><b>Bulundu:</b> demo uçtan uca çalıştırılınca 3. adımda çöktü (Hafta 6).</li>
+          <li><b>Kaydedildi:</b> hata mesajı ve sebep günlüğe yazıldı.</li>
+          <li><b>Düzeltildi:</b> değişken adı değiştirildi.</li>
+          <li><b>Test eklendi:</b> aynı hatayı yakalayan birim testi.</li>
+          <li><b>Yeniden test edildi:</b> bütün testler ve demonun 7 adımı geçti.</li>
+          <li><b>Kapatıldı:</b> commit 12b606b; ders: her özellikten sonra uçtan uca test.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="secimler" aria-labelledby="secim-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="secim-b">Hangi aracı ve modeli neden seçtik?</h2>
+      <p>Her karar alternatifleriyle karşılaştırılarak verildi. "Neden X'i seçtiniz?" sorusuna cevap: alternatif neydi, neden elendi, seçtiğimizin bedeli ne.</p>
+    </div>
+    <div class="tablo-kap">
+      <table class="hata-tablo">
+        <thead><tr><th>Karar</th><th>Alternatifler</th><th>Neden bu</th></tr></thead>
+        <tbody>
+          <tr><td class="n">Python</td><td>Java (Zemberek doğrudan çalışırdı), JavaScript</td><td>Yazdığımız kodu python.exe satır satır okuyup çalıştırır, ayrıca derlemek gerekmez. Proje modüllere bölünmüş (her kriter ayrı dosya); demo ve arayüz bu modülleri sırayla çağırıyor.</td><td>PDF çıkarma, dil modeli bağlantısı ve değerlendirme için en güçlü kütüphaneler Python'da; Türkçe NLP araçları JS'te neredeyse yok.</td></tr>
+          <tr><td class="n">PyMuPDF</td><td>pdfplumber (paragraf gruplaması yok, yavaş), pypdf (güvenilir koordinat yok), ikisi birlikte</td><td>PDF'in içindeki metin katmanını okur. Her kelime ve blok için metni, sayfadaki kutusunu (bbox: sol, üst, sağ, alt) ve yazı tipini (kalın, italik, boyut) verir. Not eklerken o koordinatlara dalgalı çizgi veya çerçeve çizer; sayfa görüntüsü için sayfayı resme çevirir.</td><td>Blok + konum doğrudan geliyor; PDF'e not ekleme ve basılı sayfa numarası aynı kütüphanede. İki kütüphane aynı metni farklı çıkarırdı.</td></tr>
+          <tr><td class="n">Starlang + Zemberek</td><td>Hunspell-tr, yalnız Zemberek, yalnız Starlang, VNLP, zeyrek</td><td>Denemede (1.909 kelime, 40 bozuk kelime): Hunspell 80 sahte hata verdi, şapkalı yazımları ve kesmeli özel adları hata saydı. Zemberek "nesile"yi geçerli saydı. Starlang 40/40 buldu ama güven ayrımı yoktu. İkisi birlikte: gerçek hata kaçmıyor, iki görüş hemfikirse güven 1.</td></tr>
+          <tr><td class="n">Yerel model (Ollama)</td><td>Bulut API (Claude, Gemini, GPT), hibrit</td><td>Ücretsiz ve sınırsız deneme (eşik ayarı için önemli), internetsiz, hocanın yanında aynı sonuç, kitap dışarı gitmiyor. Bedeli: küçük modeller daha az isabetli olabilir.</td></tr>
+          <tr><td class="n">gemma4</td><td>Turkish-Gemma, qwen3.5, gemma2, qwen3:4b, aya-expanse</td><td>Dil modeli metni küçük parçalara (token) böler ve her adımda en olası sonraki parçayı tahmin ederek cevap yazar. Ona iki cümleyi bulundukları yerle (başlık, paragraf) birlikte verip "çelişiyor mu, neden?" diye soruyoruz; kararı ve kısa açıklamayı belirli bir biçimde döndürüyor.</td><td>31 cümle çiftinde yarıştırıldı. Doğruluk: gemma4 0,94; Turkish-Gemma 0,84; qwen3.5 0,90; gemma2 0,83; qwen3:4b 0,82; aya 0,68. gemma4'ün açıklamaları daha kısa ve net (her tespitin açıklaması proje şartı). Turkish-Gemma ikinci görüş oldu.</td></tr>
+          <tr><td class="n">bge-m3</td><td>nomic-embed-text (ağırlıklı İngilizce), Türkçe e5 modelleri (PyTorch gerekir)</td><td>Her cümleyi anlamını temsil eden bir sayı listesine (vektör, 1024 sayı) çevirir. Anlamca yakın cümlelerin vektörleri de birbirine yakın olur; böylece kelimeleri farklı ama konusu aynı cümleler bulunabiliyor.</td><td>Çok dilli, Ollama üzerinden çalışıyor, ağır bağımlılık eklemiyor.</td></tr>
+          <tr><td class="n">Çelişki yöntemi: benzer cümle + LLM hakem</td><td>Yalnız kural (aynı isim + farklı sayı), iddia çıkarma (LLM tüm kitabı okur, 2–6 saat), bütün çiftler (~1,9 milyon)</td><td>Dil modeli yalnız birkaç yüz–birkaç bin aday çifte bakıyor; sayısal ve sözel çelişkileri birlikte yakalıyor; açıklanabilir. Bedeli: çok farklı kelimelerle anlatılan çelişki aday seçilmeyebilir.</td></tr>
+          <tr><td class="n">Güven = iki modelin hemfikirliği</td><td>Tek görüş, aynı modelin iki turu</td><td>Aynı model genelde kendisiyle hemfikir olur, gerçek ikinci görüş değil. Yazımdaki iki araç mantığıyla aynı.</td></tr>
+          <tr><td class="n">Okunabilirlik: hibrit</td><td>Literatürdeki mutlak eşikler, yalnız göreli eşik</td><td>Mutlak eşiklerle 6. sınıf kitabında paragrafların %72'si "seviye üstü" çıktı. Kitap düzeyinde mutlak değer, paragraf düzeyinde kitabın en zor %10'u.</td></tr>
+          <tr><td class="n">BERTurk modeli (denendi)</td><td>Kural tabanlı sistemle devam</td><td>Bağlama bağlı hataları (de/da, ki) yakalamak için. Ön kayıtlı ölçütü geçemedi, ürüne girmedi; yerine kesme denetimi.</td></tr>
+          <tr><td class="n">Kurul: ChatGPT, Gemini, DeepSeek</td><td>Etiketleri sistemi yazan yapay zekânın koyması, tek başına etiketlemek</td><td>Sistemi yazandan bağımsız, üç farklı firma; çoğunluk oyu tek modelin yanılgısını azaltır. Uyumu κ ile ölçüldü.</td></tr>
+          <tr><td class="n">openpyxl ve notlu PDF</td><td>Yalnız kendi inceleme sayfamız</td><td>Kitabı inceleyen kişi PDF ve Excel ile çalışıyor; sonuçları onun kullandığı yere taşıdık.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="sayilar" aria-labelledby="sayi-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="sayi-b">Ezberlenecek sayılar</h2>
+      <p>Hoca sayı sorarsa bu tablo. Her satırda sayının ne anlama geldiği de yazıyor; sayıyı söyledikten sonra anlamını da ekle.</p>
+    </div>
+    <div class="tablo-kap">
+      <table>
+        <thead><tr><th>Sayı</th><th>Ne</th><th>Hafta</th></tr></thead>
+        <tbody>
+          <tr><td class="n">623 → 77</td><td>Yazımın ilk denemesindeki tespit sayısı, önlemlerden sonra</td><td>4</td></tr>
+          <tr><td class="n">55 / 56</td><td>Kilitli test setinde bilerek eklenen yazım hatalarından bulunan</td><td>4</td></tr>
+          <tr><td class="n">27 / 35 (%77)</td><td>Eklenen çelişkilerden bulunan; bulunanların hepsi doğru</td><td>4</td></tr>
+          <tr><td class="n">6 model, 31 çift</td><td>Çelişki modeli seçimi; gemma4 kazandı</td><td>4</td></tr>
+          <tr><td class="n">2.743 → 628</td><td>9 kitapta gösterilen yazım tespiti (Faz 2 sonunda); 37 gerçek hatadan kayıp 0</td><td>5</td></tr>
+          <tr><td class="n">0,82 &lt; 0,85</td><td>Müfredatta dil modelinin bulduğu çıktı oranı / önceden yazılan ölçüt</td><td>5</td></tr>
+          <tr><td class="n">18 / 18</td><td>Müfredatta modelin doğru sayfayı bulması</td><td>5</td></tr>
+          <tr><td class="n">7 adım</td><td>DEMO.bat: PDF, okunabilirlik, yazım, tutarlılık, müfredat, inceleme sayfası, notlu PDF + Excel</td><td>5–6</td></tr>
+          <tr><td class="n">~205 bin</td><td>Yazım modelinin eğitim cümlesi (GECTurk + ~28 bin Vikipedi + yapay)</td><td>8</td></tr>
+          <tr><td class="n">0,91 / 60'ta 1</td><td>Yazım modeli: yapay hatalarda başarı / gerçek kitapta yeni tespitlerden gerçek olan</td><td>8</td></tr>
+          <tr><td class="n">31 / 46 (%67)</td><td>Kesme denetiminin doğrulamada gerçek çıkan tespitleri</td><td>8</td></tr>
+          <tr><td class="n">6 / 17 (%35)</td><td>İlk bağımsız ölçümde kitabın gerçek hatalarından bulunan (İ düzeltmesinden sonra; önce 6/21)</td><td>8</td></tr>
+          <tr><td class="n">≈ %20–28</td><td>Bağımsız ölçümlerde işaretlenenlerin gerçek hata oranı (isabet), "dörtte bir"</td><td>8</td></tr>
+          <tr><td class="n">κ = 0,33</td><td>Kurulun kendi arasındaki uyumu (Fleiss kappa; zayıf-orta)</td><td>8</td></tr>
+          <tr><td class="n">1.28.2</td><td>Sabitlenen PyMuPDF sürümü</td><td>8</td></tr>
+          <tr><td class="n">49 → 138 → 196 → 267</td><td>Otomatik test sayısının gelişimi (şu an 307)</td><td>1–8</td></tr>
+          <tr><td class="n">%10 → %40 → %60</td><td>Raporlarda verilen tahmini tamamlanma oranı</td><td>1, 4, 8</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="hatalar" aria-labelledby="hata-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="hata-b">Bütün hatalar ve nasıl çözüldükleri</h2>
+      <p>Raporlarda geçen her problem, zaman sırasıyla. Her satırda: ne oldu, neden oldu, ne yaptık ve sonuç. "Karşılaştığın bir sorunu anlat" sorusu için buradan istediğini seç.</p>
+    </div>
+<div class="bolum-bas"><h3>Önce şu 5 kural: hataların hepsi bunlardan birine çıkıyor</h3></div>
+<div class="kurallar">
+<div class="kural"><b>Basılı sayfaya bak</b><span>PDF'in metni yalan söyleyebilir (sahte İ).</span></div>
+<div class="kural"><b>Kodu kendin çalıştır</b><span>Ajanın raporu değil, çalışan kod kanıttır (%90 → %50'ler).</span></div>
+<div class="kural"><b>Uçtan uca dene</b><span>Parçalar çalışıyor diye bütün çalışmaz (demo çöküşü).</span></div>
+<div class="kural"><b>Ölçütü önce yaz</b><span>Sonuca göre çıta oynatılmaz (müfredat 0,85).</span></div>
+<div class="kural"><b>Sürümü sabitle</b><span>Aynı kütüphane, iki sürüm, iki sonuç (PyMuPDF).</span></div>
+</div>
+<div class="bolum-bas"><h3>Hata hikâyeleri: her birinin bir lakabı var</h3><p>Lakabı hatırlarsan hikâyenin gerisi gelir. Ayrıntılı tablo aşağıda.</p></div>
+<div class="hikayeler">
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Harita fırtınası</span><span class="hf">Başlangıç</span></div><dl><dt>Ne oldu</dt><dd>Haritalı sayfada 1.525 ayrı blok, okuma sırası karışık.</dd><dt>Neden</dt><dd>Her il adı, her rakam ayrı blok; PDF sırası dizgi sırası.</dd><dt>Çözüm</dt><dd>Bloklar silinmedi; türe ayrıldı, yukarıdan aşağı sıralandı.</dd></dl><p class="ders"><b>Ders:</b> Hiçbir şeyi silme, sınıflandır.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Kayıp harfler</span><span class="hf">Başlangıç</span></div><dl><dt>Ne oldu</dt><dd>Metinde "Bast&#xFFFD;&#xFFFD;&#xFFFD;n" gibi bozuk kelimeler.</dd><dt>Neden</dt><dd>Font ş, ı, ğ, İ'nin metin karşılığını PDF'e yazmamış.</dd><dt>Çözüm</dt><dd>Bu bloklar "bozuk" türü aldı, yazım denetimine girmiyor.</dd></dl><p class="ders"><b>Ders:</b> Okuyamadığın metne hata deme.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Formüllerin kavgası</span><span class="hf">Başlangıç</span></div><dl><dt>Ne oldu</dt><dd>Bir formül %91, öbürü %37 "zor" dedi.</dd><dt>Neden</dt><dd>Formüller yalnız kelime ve cümle uzunluğuna bakıyor.</dd><dt>Çözüm</dt><dd>Kitabın en zor %10'u + en az iki formül hemfikirse işaretle.</dd></dl><p class="ders"><b>Ders:</b> Tek ölçüye güvenme, uzlaştır.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Boşluksuz nokta</span><span class="hf">Başlangıç</span></div><dl><dt>Ne oldu</dt><dd>4 cümle 3 sayıldı.</dd><dt>Neden</dt><dd>Noktadan sonra boşluk yoktu.</dd><dt>Çözüm</dt><dd>Kural boşluksuz cümle sonunu da tanıyor; T.B.M.M. hatası da bulundu.</dd></dl><p class="ders"><b>Ders:</b> Test yazarken ikinci hata da çıkar.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Trigonometrik yağmuru</span><span class="hf">Hafta 4</span></div><dl><dt>Ne oldu</dt><dd>623 yazım tespiti; "trigonometrik" tek başına 139 kez.</dd><dt>Neden</dt><dd>Sözlükte olmayan her kelime hata sayılıyordu (terim, özel ad).</dd><dt>Çözüm</dt><dd>3+ geçen kelime terim, büyük harfliler atlandı, dil modeli hakemi. 623 → 77.</dd></dl><p class="ders"><b>Ders:</b> Sık geçen kelime büyük ihtimalle terimdir.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Jandama kaçağı</span><span class="hf">Hafta 4</span></div><dl><dt>Ne oldu</dt><dd>Hakem "jandama"yı doğru saydı.</dd><dt>Neden</dt><dd>Model kelimeyi kafasında "jandarma" diye okudu.</dd><dt>Çözüm</dt><dd>Kitapta geçen bir kelimeye tek harf uzaksa hakem düşüremiyor.</dd></dl><p class="ders"><b>Ders:</b> Dil modeli küçük harf hatalarını göremez.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Bağlamsız cümle</span><span class="hf">Hafta 4</span></div><dl><dt>Ne oldu</dt><dd>İlk denemede 21 çelişki, neredeyse hepsi yanlış.</dd><dt>Neden</dt><dd>Cümleler başlıksız verildi; D/Y etkinlikleri bilerek yanlış.</dd><dt>Çözüm</dt><dd>Cümlenin başlığı ve paragrafı da veriliyor; şıklar ve replikler iddia sayılmıyor.</dd></dl><p class="ders"><b>Ders:</b> Cümle yerinden koparılınca anlamı değişir.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Ekran karartması</span><span class="hf">Hafta 4</span></div><dl><dt>Ne oldu</dt><dd>Uzun testte ekran gitti, bilgisayar kapandı.</dd><dt>Neden</dt><dd>VRAM doldu, şarj çıktı, Turbo mod.</dd><dt>Çözüm</dt><dd>1 GB boş VRAM, aynı anda tek model, Bekçi (pil, sıcaklık, RAM).</dd></dl><p class="ders"><b>Ders:</b> Uzun işten önce makineyi hazırla.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">İtalik tuzağı</span><span class="hf">Hafta 5</span></div><dl><dt>Ne oldu</dt><dd>"sorumluklar" ve "söyleyebillirsiniz" alta indi.</dd><dt>Neden</dt><dd>İtalik başlık terim sanıldı; alıntı şiirden taştı.</dd><dt>Çözüm</dt><dd>Çoğu italik blokta italik terim sayılmıyor; alıntı büyük boşlukta duruyor.</dd></dl><p class="ders"><b>Ders:</b> Düzelttikten sonra ölçüm temiz değildir, bunu yaz.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Kopuk satırlar</span><span class="hf">Hafta 5</span></div><dl><dt>Ne oldu</dt><dd>Cümleler yarıdan başlıyor, satır sonu kelimeleri denetlenmiyor.</dd><dt>Neden</dt><dd>PDF bazı kutularda her satırı ayrı okuyor.</dd><dt>Çözüm</dt><dd>Satır birleştirme (5 şart). Yeni gerçek hata: "hazılayabilirsiniz".</dd></dl><p class="ders"><b>Ders:</b> Önce metni düzgün oku, sonra denetle.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Kapak tuzağı</span><span class="hf">Hafta 5</span></div><dl><dt>Ne oldu</dt><dd>Müfredatta model çıkarılan temaya bile "var" dedi.</dd><dt>Neden</dt><dd>En benzer paragraf tema kapağıydı (listede aynen yazıyor).</dd><dt>Çözüm</dt><dd>Kapak, içindekiler çıkarıldı; 0,82 &lt; 0,85 → ürüne yalnız kavram kontrolü.</dd></dl><p class="ders"><b>Ders:</b> Benzer olmak, konuyu anlatmak demek değil.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Gölge isim</span><span class="hf">Hafta 6</span></div><dl><dt>Ne oldu</dt><dd>Demo 3. adımda UnboundLocalError ile çöktü.</dd><dt>Neden</dt><dd>Değişkenin adı bir modülün adıyla aynıydı.</dd><dt>Çözüm</dt><dd>Değişken dusuk_sayisi oldu; çakışmayı yakalayan test eklendi.</dd></dl><p class="ders"><b>Ders:</b> Modülün adını değişkene verme.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Ezberci model</span><span class="hf">Hafta 8</span></div><dl><dt>Ne oldu</dt><dd>Yazım modeli yapayda F1 0,91, gerçek kitapta 60'ta 1.</dd><dt>Neden</dt><dd>Eğitim verisi çoğunlukla yapay hatalardı.</dd><dt>Çözüm</dt><dd>Ön kayıtlı ölçüt geçilemedi, ürüne girmedi; bulduğu "Türkistanda" kesme kuralına yol açtı.</dd></dl><p class="ders"><b>Ders:</b> Yapay veride başarı, gerçekte başarı değil.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Kendi sınavını kendi okuyan</span><span class="hf">Hafta 8</span></div><dl><dt>Ne oldu</dt><dd>Başarı sayıları bağımsız değildi.</dd><dt>Neden</dt><dd>Etiketleri sistemi yazan yapay zekâ koymuştu.</dd><dt>Çözüm</dt><dd>Üç firmalı kurul, kilitli çıktı, gizli kaynak, çoğunluk oyu, Fleiss κ.</dd></dl><p class="ders"><b>Ders:</b> Ölçen ile yapan ayrı olmalı.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Sahte İ</span><span class="hf">Hafta 8</span></div><dl><dt>Ne oldu</dt><dd>"TAHRIŞ EDICI" gibi büyük harf "hataları".</dd><dt>Neden</dt><dd>PDF metni İ'yi I veriyor; basılı harf doğru.</dd><dt>Çözüm</dt><dd>PDF okuma yalnız yanlış İ'leri düzeltiyor; bulma 6/21 değil 6/17.</dd></dl><p class="ders"><b>Ders:</b> Basılı sayfaya bak.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Şişirilmiş karne</span><span class="hf">Hafta 8</span></div><dl><dt>Ne oldu</dt><dd>Ajan bulma oranını %90 civarı yazdı.</dd><dt>Neden</dt><dd>Ölçüm betiği kodu hiç çalıştırmamış, sonuç elle yazılmış.</dd><dt>Çözüm</dt><dd>Kod yeniden çalıştırıldı: %50'ler. Ajana düzeltme listesi verildi.</dd></dl><p class="ders"><b>Ders:</b> Raporu değil, kodu çalıştır.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">İki sürüm iki sonuç</span><span class="hf">Hafta 8</span></div><dl><dt>Ne oldu</dt><dd>Aynı PDF farklı bloklara bölündü.</dd><dt>Neden</dt><dd>PyMuPDF 1.27 ve 1.28 farklı davranıyor; yanlış Python kullanılmış.</dd><dt>Çözüm</dt><dd>Sürüm 1.28.2'ye sabitlendi; başka sürümde program duruyor.</dd></dl><p class="ders"><b>Ders:</b> Ölçtüğün sürümle çalış.</p></article>
+<article class="hikaye"><div class="ust-satir"><span class="lakap">Ters bölü yasağı</span><span class="hf">Hafta 8</span></div><dl><dt>Ne oldu</dt><dd>Sayfa görüntüsü betiği hiç başlamadı (SyntaxError).</dd><dt>Neden</dt><dd>Python 3.11'de f-string'in {} içinde \ kullanılamıyor.</dd><dt>Çözüm</dt><dd>re.sub önce ayrı değişkende hesaplandı.</dd></dl><p class="ders"><b>Ders:</b> Önce hesapla, sonra f-string'e koy.</p></article>
+</div>
+<div class="bolum-bas"><h3>Ayrıntılı tablo</h3></div>
+    <div class="tablo-kap">
+      <table class="hata-tablo">
+        <thead><tr><th>Hafta</th><th>Problem</th><th>Sebep</th><th>Çözüm ve sonuç</th></tr></thead>
+        <tbody>
+          <tr><td class="n">Başl.</td><td>Gerçek MEB kitabında PDF dağınık çıktı: sayfa başına ~71 blok, haritada 1.525 blok, okuma sırası bozuk</td><td>Haritadaki her il adı ve rakam ayrı blok; PDF blokları dizgi programının yazdığı sırayla veriyor</td><td>Bloklar silinmedi, türe ayrıldı (paragraf, kısa, bozuk, simge) ve yukarıdan aşağıya, soldan sağa sıralandı. Paragraflar doğru sırada çıkıyor.</td></tr>
+          <tr><td class="n">Başl.</td><td>Bazı sayfalarda harfler bozuk ("Bast&#xFFFD;&#xFFFD;&#xFFFD;n")</td><td>Font Türkçe harflerin (ş, ı, ğ, İ) metin karşılığını PDF'e kaydetmemiş; ekranda doğru, metinde yok</td><td>Bu bloklar "bozuk" türü aldı ve yazım denetimine girmiyor; sahte hata üretmiyorlar.</td></tr>
+          <tr><td class="n">Başl.</td><td>Okunabilirlik formülleri 6. sınıf kitabında paragrafların %72'sini seviye üstü buldu, formüller birbiriyle çelişti (%91 ile %37)</td><td>Formüller yalnız kelime ve cümle uzunluğuna bakıyor; sınıf tabloları ders kitaplarına göre yapılmamış</td><td>İki aşama: kitap özeti (formüllerin genel sonucu) + paragraf düzeyi (kitabın en zor %10'u ve en az iki formül hemfikir).</td></tr>
+          <tr><td class="n">Başl.</td><td>Sistem 4 cümleyi 3 sayıyordu</td><td>Kitapta noktadan sonra boşluk yoktu; cümle bölme kuralı boşluk arıyordu</td><td>Kural boşluksuz cümle sonlarını da tanıyor. Testi yazarken "T.B.M.M." kısaltmasındaki ikinci hata da bulunup düzeltildi.</td></tr>
+          <tr><td class="n">4</td><td>Yazımda doğru kelimeler hata sayılıyordu (623 tespit; "trigonometrik" 139 kez)</td><td>Morfoloji araçları sözlükte olmayan her kelimeye hata diyor: özel ad, terim, eski yazım, bozuk PDF parçası</td><td>3+ geçen kelime terim, büyük harfle başlayan atlandı, bozuk bloklar ayrıldı, dil modeli hakemi eklendi. 623 → 77; TDE'de 39 → 13; 56'da 55 hâlâ bulunuyor.</td></tr>
+          <tr><td class="n">4</td><td>Hakem "jandama"yı doğru saydı</td><td>Model kelimeyi "jandarma" sandı; küçük hataları göremiyor</td><td>Kitapta geçen bir kelimeye tek harf uzak olan kelimeyi hakem düşüremiyor.</td></tr>
+          <tr><td class="n">4</td><td>İlk tutarlılık denemesinde 21 çelişki, neredeyse hepsi yanlış</td><td>Cümle modele bağlamsız verildi (ülke/iklim başlıkta); D/Y etkinlikleri ve test şıkları bilerek yanlış</td><td>Cümlenin yeri (başlık, paragraf, yönerge) de veriliyor; şıklar ve karakter konuşmaları iddia sayılmıyor; Turkish-Gemma yalnız destek oyu. Gerçek kitaplarda sahte çelişki kalmadı, eklenenlerin %77'si bulundu.</td></tr>
+          <tr><td class="n">4</td><td>Bilgisayar çöktü, ekran gitti</td><td>Ekran kartı belleği (VRAM) doldu, sürücü sıfırlandı; şarj çıkmıştı, bilgisayar Turbo moddaydı</td><td>OLLAMA_BASLAT.bat ekran kartında 1 GB boş bırakıyor, aynı anda tek model; donanim.py (Bekçi) pil, sıcaklık, RAM kontrolü. Sonraki uzun testler çökmeden bitti.</td></tr>
+          <tr><td class="n">4</td><td>Test setinde hatalı madde ve yanlış puanlama</td><td>Bir madde setin kuralına aykırıydı (karakter konuşmasından alınmıştı); puanlama "Hz." kısaltması yüzünden bulunan çelişkiyi bulunamadı saydı</td><td>Puanlama düzeltildi, hatalı madde raporda belirtildi; kilitli test seti değiştirilmedi.</td></tr>
+          <tr><td class="n">5</td><td>İki gerçek hata ("sorumluklar", "söyleyebillirsiniz") yanlışlıkla alta indi</td><td>İtalik başlık terim sanıldı; alıntı şiirin altındaki büyük boşluğu atlayıp normal metne uzadı; hakem de doğru dedi</td><td>Blok çoğunlukla italikse italik terim sayılmıyor; alıntı büyük boşlukta duruyor; hakeme hece tekrarı kontrolü. Ölçümün temiz olmadığı raporda yazıldı.</td></tr>
+          <tr><td class="n">5</td><td>Cümleler yarıdan başlıyor, satır başı/sonu kelimeleri denetlenmiyordu</td><td>PDF bazı kutularda her satırı ayrı parça okuyordu (TDE 12: 9.745 parçanın 2.551'i devam)</td><td>Satır birleştirme; satır sonu tiresi silindi, bölünmüş kelimeler ("Ga" + "rip") birleşti. Kalın iki satırlık başlık yapışıp yeni sahte çelişki çıkarınca yalnız tek satırlar birleşecek şekilde düzeltildi. Yeni gerçek hata: "hazılayabilirsiniz".</td></tr>
+          <tr><td class="n">5</td><td>Müfredatta dil modeli ölçütü geçemedi; çıkarılan temaya bile "karşılanıyor" dedi</td><td>En benzer paragraf çoğu zaman tema kapağıydı (programın listesi aynen yazıyor); ölçüm kodu kapağı önceki temaya sayıyordu</td><td>Kapak, içindekiler, tanıtım sayfaları çıkarıldı; karar Biyoloji 11 ile (temiz doğrulama). 18/18 doğru sayfa ama 0,82 &lt; 0,85 → ürüne yalnız anahtar kavram kontrolü.</td></tr>
+          <tr><td class="n">5</td><td>Tutarlılıkta TDE 12'de 2 yanlış çelişki kaldı</td><td>Doğru-yanlış etkinlik tablosu; iki farklı şairin biyografisi (özne "Sanatçı")</td><td>Sonraki haftalarda D/Y etkinlik maddeleri karşılaştırmadan çıkarıldı (Hafta 8).</td></tr>
+          <tr><td class="n">6</td><td>Demo 3. adımda çöküyordu (UnboundLocalError)</td><td>Değişken adı (dusuk_oncelik) bir modülün adıyla aynıydı; demo bir haftadır uçtan uca çalıştırılmamıştı</td><td>Değişken dusuk_sayisi yapıldı, isim çakışmasını yakalayan test eklendi; demo 7 adımı tamamladı.</td></tr>
+          <tr><td class="n">8</td><td>Yazım modeli yapayda F1 0,91, gerçekte 60'ta 1</td><td>Eğitim verisi çoğunlukla yapay; gerçek kitapta tanınmayan kelimeler terim, eski metin, özel ad, bozuk PDF kelimesi</td><td>Ön kayıtlı ölçüt geçilmeyince ürüne girmedi, olumsuz sonuç raporlandı. Bulduğu "Türkistanda" kesme denetimine yol açtı (%67 isabetle ürüne girdi).</td></tr>
+          <tr><td class="n">8</td><td>Başarı sayıları bağımsız değildi</td><td>Etiketleri sistemi yazan yapay zekâ koymuştu; ölçüm yalnız eklenen hatalarla yapılmıştı</td><td>Üç firmanın modelinden kurul, kilitli çıktı, gizli kaynak, çoğunluk oyu, Fleiss κ. İlk bağımsız sayılar: isabet ~dörtte bir, bulma düşük.</td></tr>
+          <tr><td class="n">8</td><td>"TAHRIŞ EDICI", "DINLEME" gibi sahte büyük harf hataları; ilk ölçümde 4 sahte "gerçek hata"</td><td>PDF metni bazı fontlarda "İ"yi "I" veriyor; basılı harf doğru. Kurul da metne bakmıştı</td><td>PDF okuma yalnız yanlış "İ"leri düzeltiyor; şüpheli tespitlerin sayfa görüntüsüne bakıldı. Bulma 6/21 değil 6/17 (%35).</td></tr>
+          <tr><td class="n">8</td><td>Ajan raporunda şişirilmiş oran (%90 civarı)</td><td>Ölçüm betiği kodu hiç çalıştırmıyordu, sonuç elle yazılmıştı</td><td>Rapor ikinci bir yapay zekâya kontrol ettirildi; kod çalıştırılınca %50'ler civarı. Ajana düzeltme listesi; artık her rapor kod çalıştırılarak ve basılı sayfaya bakılarak kontrol ediliyor.</td></tr>
+          <tr><td class="n">8</td><td>Aynı PDF farklı bloklara bölündü</td><td>PyMuPDF 1.27 ve 1.28 farklı davranıyor; yanlış Python ortamı kullanılmıştı</td><td>Sürüm 1.28.2'ye sabitlendi; farklı sürümde program RuntimeError verip duruyor.</td></tr>
+          <tr><td class="n">8</td><td>Sayfa görüntüsü alan betik hiç çalışmadı (SyntaxError)</td><td>Python'un bu sürümünde f-string'in süslü parantezi içinde ters bölü (\) kullanılamıyor</td><td>re.sub ifadesi önce ayrı bir değişkende hesaplandı.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bolum-bas" style="margin-top:28px">
+      <h3>Raporlardaki gerçek hata mesajları</h3>
+      <p>Hoca "çalıştırırken aldığınız bir hata mesajı" isterse bunlar.</p>
+    </div>
+    <div class="sozluk">
+      <div class="terim"><b>MemoryError</b><p>Uzun bir test sırasında bilgisayarın belleği doldu, Python durdu; aynı anda dil modeli de çöktü. (Hafta 4)</p></div>
+      <div class="terim"><b>Load failed (Windows kodu 0xc0000409)</b><p>Ekran kartında iki model aynı anda yüklü kalınca model sunucusu (Ollama) çöktü. Çözüm: aynı anda tek model. (Hafta 4)</p></div>
+      <div class="terim"><b>AssertionError (birim testi)</b><p>Biyoloji 11'deki "ACTH: …, ADH: …" hormon tanımları tiyatro repliği sanılıyordu; test bunu yakaladı. (Hafta 4)</p></div>
+      <div class="terim"><b>UnboundLocalError</b><p class="kod">cannot access local variable 'dusuk_oncelik' where it is not associated with a value</p><p>Değişken adı modül adıyla çakıştı. (Hafta 6)</p></div>
+      <div class="terim"><b>SyntaxError</b><p class="kod">f-string expression part cannot include a backslash</p><p>Sayfa görüntüsü betiğinde f-string içinde ters bölü. (Hafta 8)</p></div>
+      <div class="terim"><b>RuntimeError (bizim koyduğumuz)</b><p>PyMuPDF sürümü 1.28.2 değilse program bilerek durup doğru Python'u kullanmayı söylüyor. (Hafta 8)</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="kodlar" aria-labelledby="kod-b">
+  <div class="ic">
+    <div class="bolum-bas"><h2 id="kod-b">Kodlar: gerçek kod ve sözde kod yan yana</h2>
+      <p>Her kodda üç şey var: <b>gerçek kod</b> (raporda olan), <b>sözde kod</b> (Türkçe adımlar; hoca "ne yapıyor?" derse bunu anlat) ve <b>en kısa hâli</b> (hoca "yaz" derse tahtaya bunu yazabilirsin). Sarı kutudaki cümleyi ezberle.</p>
+      <p>Sözde kod kuralları: <code>←</code> "değer ata" demek, <code>EĞER … İSE</code> bir koşul, <code>HER … İÇİN</code> bir döngü, <code>DÖNDÜR</code> sonucu geri ver.</p></div>
+    <div class="kodlar">
+<article class="kod-kart"><div class="ust-satir"><h3>Ana hakem + yardımcı hakem: çelişkide güven</h3><span class="hf">Hafta 4</span></div><p>Bir cümle çifti çelişkili mi? İki model oy veriyor, güven skoru oylara göre.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">oylar = [iz[alan]["karar"] == "celiski" for alan in ("hakem", "ikinci_gorus")]
+if not oylar[0]:
+    continue
+iz["guven"] = 1.0 if all(oylar) else 0.5</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER cümle çifti İÇİN:
+    oy1 ← gemma4 "çelişki" dedi mi?
+    oy2 ← Turkish-Gemma "çelişki" dedi mi?
+    EĞER oy1 hayır İSE:
+        bu çifti atla
+    EĞER oy1 ve oy2 evet İSE:
+        güven ← 1
+    DEĞİLSE:
+        güven ← 0,5</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if gemma4 == "celiski":
+    if turkish_gemma == "celiski":
+        guven = 1.0
+    else:
+        guven = 0.5</pre></details><p class="ezber">gemma4 demezse yok; ikisi derse 1, yalnız gemma4 derse yarım.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Kırmızı kalem: yazım hatasını PDF'e çizmek</h3><span class="hf">Hafta 4</span></div><p>Bulunan yazım hatasını kitabın PDF'ine not olarak işler.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">kutular = _kutular(...)          # kelimenin sayfadaki kutuları
+icerik = f"{t.aciklama} ... Güven: ..."
+if kutular:
+    annot = sayfa.add_squiggly_annot(kutular)
+else:  # kelime bulunamadı: bütün blok
+    kutular = [pymupdf.Rect(t.bbox) + (-2, -2, 2, 2)]
+    annot = sayfa.add_rect_annot(kutular[0])
+    annot.set_border(width=0.8, dashes=[2, 2])
+_not(annot, "yazim", f"Yazım ({tur})", icerik, renk)</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">FONKSİYON yazım_notu_çiz(tespit):
+    kutular ← hatalı kelimenin sayfadaki yeri
+    not ← açıklama + sayfa + güven + uyarı
+    EĞER kelime bulundu İSE:
+        altına dalgalı çizgi çiz
+    DEĞİLSE:
+        bütün bloğa kesikli çerçeve çiz
+    notu ekle (düşük öncelikliyse farklı renk)</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if kutular:
+    sayfa.add_squiggly_annot(kutular)
+else:
+    sayfa.add_rect_annot(blok_kutusu)</pre></details><p class="ezber">Bul, yaz, çiz. Bulamazsan çerçevele; tespit kaybolmasın.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Yarım cümle dedektifi: iki satır birleşsin mi?</h3><span class="hf">Hafta 5</span></div><p>PDF her satırı ayrı okuyunca, üstteki satırın alttakiyle aynı paragraf olup olmadığına karar verir.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">satir = a.bbox[3] - a.bbox[1]
+if satir &gt; _SATIR_YUKSEKLIGI_EN_FAZLA:
+    return False
+bosluk = b.bbox[1] - a.bbox[3]
+hizali = b.bbox[0] - 3 &lt;= a.bbox[0] &lt;= b.bbox[0] + 25
+dolu = a.bbox[2] &gt;= max(a.bbox[2], b.bbox[2]) - 15
+son = a.metin.rstrip()[-1:]
+yarim = b.metin.lstrip()[:1].islower() or ((son.islower() or son == ",") and len(a.metin.split()) &gt;= 5)
+return -2 &lt;= bosluk &lt;= 0.6 * satir and hizali and dolu and yarim and not _LISTE.match(b.metin)</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">FONKSİYON birleşsin_mi(üst, alt):
+    EĞER üst birden çok satırsa: DÖNDÜR hayır
+    yakın  ← aradaki boşluk &lt; satır yüksekliği × 0,6
+    hizalı ← iki satırın sol kenarı aynı hizada
+    dolu   ← üst satır sütunun sonuna kadar gidiyor
+    yarım  ← alt küçük harfle başlıyor
+             YA DA üst virgül / küçük harfle bitiyor
+    madde  ← alt "a)" ya da "•" ile başlıyor
+    DÖNDÜR yakın VE hizalı VE dolu VE yarım VE madde değil</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">def birlessin_mi(ust, alt):
+    satir = ust.alt_kenar - ust.ust_kenar
+    bosluk = alt.ust_kenar - ust.alt_kenar
+    yakin = bosluk &lt; 0.6 * satir
+    yarim = alt.metin[0].islower()
+    return yakin and yarim</pre></details><p class="ezber">Beş soru: Yakın mı? Hizalı mı? Dolu mu? Yarım mı? Madde değil mi? Hepsi evetse birleştir.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Gölge isim: demoyu çökerten hata</h3><span class="hf">Hafta 6</span></div><p>Hatanın nasıl oluştuğunun küçük bir örneği. Python, fonksiyonun herhangi bir yerinde bir ada değer atanıyorsa o adı baştan sona yerel değişken sayar.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">from .kriterler import dusuk_oncelik, ...   # modül
+
+def main() -&gt; None:
+    ...
+    # satır 244: HATA burada
+    yazim_tespitleri = dusuk_oncelik.isaretle(pdf, bloklar, yazim_tespitleri)
+    ...
+    # düzeltmeden önce: aynı ad sayaç yapılmıştı
+    dusuk_oncelik = sum(t_.guven_skoru &lt; 0.5 for t_ in yazim_tespitleri)
+    # düzeltme (12b606b):
+    dusuk_sayisi = sum(t_.guven_skoru &lt; 0.5 for t_ in yazim_tespitleri)</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">modül adı: dusuk_oncelik
+FONKSİYON main:
+    dusuk_oncelik'i modül gibi kullan   ← Python: "bu yerel değişken,
+                                          henüz değeri yok!"
+    ...
+    dusuk_oncelik ← bir sayı             ← sebep bu satır
+
+ÇÖZÜM: değişkenin adını dusuk_sayisi yap</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">import math
+
+def hesapla():
+    print(math.pi)   # UnboundLocalError
+    math = 5         # modülün adını değişkene verdik</pre></details><p class="ezber">Modülün adını değişkene verme; gölge düşer.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Gölge isim avcısı: eklenen test</h3><span class="hf">Hafta 6</span></div><p>Aynı hata bir daha olmasın diye: demodaki modül adları ile main'deki değişken adları çakışıyor mu?</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">moduller = {ad for ad, deger in vars(demo).items()
+            if type(deger).__name__ == "module"}
+self.assertFalse(moduller &amp; set(demo.main.__code__.co_varnames))</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">modül_adları   ← demo dosyasının içe aktardığı modüller
+değişken_adları ← main fonksiyonundaki yerel değişkenler
+ortak ← iki listenin kesişimi
+EĞER ortak boş değilse: TEST BAŞARISIZ</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">ortak = moduller &amp; degiskenler
+assert len(ortak) == 0</pre></details><p class="ezber">Modül adları ∩ değişken adları = boş olmalı.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Üç hakem, iki oy: kurulun kararı</h3><span class="hf">Hafta 8</span></div><p>Bağımsız ölçümde ChatGPT, Gemini ve DeepSeek'in oylarından her adayın kararını çıkarır.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">KURUL = ["chatgpt", "gemini", "deepseek"]
+def cogunluk(k):
+    c = Counter(oylar[a][k] for a in KURUL)
+    if c["HATA"] &gt;= 2: return "HATA"
+    if c["DEGIL"] &gt;= 2: return "DEGIL"
+    return "BELIRSIZ"</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER aday İÇİN:
+    üç modelin oyunu say
+    EĞER "hata" oyu ≥ 2 İSE:        karar ← HATA
+    DEĞİLSE EĞER "değil" oyu ≥ 2 İSE: karar ← DEĞİL
+    DEĞİLSE:                          karar ← BELİRSİZ</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">oylar = ["HATA", "DEGIL", "HATA"]
+if oylar.count("HATA") &gt;= 2:
+    karar = "HATA"
+elif oylar.count("DEGIL") &gt;= 2:
+    karar = "DEGIL"
+else:
+    karar = "BELIRSIZ"</pre></details><p class="ezber">İki "hata" = hata, iki "değil" = değil, yoksa belirsiz.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Kapıdaki görevli: PyMuPDF sürüm koruması</h3><span class="hf">Hafta 8</span></div><p>Program açılırken PyMuPDF sürümüne bakar; ölçülen sürüm değilse içeri almaz.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">_BEKLENEN_PYMUPDF_SURUMU = "1.28.2"
+if pymupdf.__version__ != _BEKLENEN_PYMUPDF_SURUMU:
+    raise RuntimeError(
+        f"PyMuPDF sürümü {pymupdf.__version__}; beklenen: {_BEKLENEN_PYMUPDF_SURUMU}. "
+        "Lütfen D:\\derskitabı\\.venv\\Scripts\\python.exe kullanın.")</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">beklenen ← "1.28.2"
+EĞER yüklü sürüm ≠ beklenen İSE:
+    DUR ve "doğru Python'u (.venv) kullan" de</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if pymupdf.__version__ != "1.28.2":
+    raise RuntimeError("Yanlış PyMuPDF sürümü")</pre></details><p class="ezber">Ölçtüğün sürüm değilse çalışma.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Ters bölü yasağı: f-string hatası</h3><span class="hf">Hafta 8</span></div><p>Sayfa görüntüsünü kaydeden satır, Python 3.11'de hiç çalışmadı.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok"># YANLIŞ (SyntaxError)
+p.get_pixmap(clip=r, dpi=300).save(
+    f"{klasor}/k42_{kitap}_{s}_{re.sub(r'\W','_',aranan)}.png")
+
+# DOĞRU
+temiz = re.sub(r'\W', '_', aranan)
+p.get_pixmap(clip=r, dpi=300).save(f"{klasor}/k42_{kitap}_{s}_{temiz}.png")</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">f-string'in { } içine \ içeren ifade YAZMA
+önce: temiz ← kelimedeki harf dışı işaretleri "_" yap
+sonra: dosya_adı ← "k42_" + kitap + sayfa + temiz + ".png"</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">temiz = aranan.replace(" ", "_")
+dosya = f"{temiz}.png"</pre></details><p class="ezber">Önce hesapla, sonra f-string'e koy.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Bonus: benzer cümleleri bulmak (rapora girmedi)</h3><span class="hf">Tutarlılık</span></div><p>"Çelişkileri nasıl buluyorsunuz?" sorusu için. Bütün cümle çiftlerine bakmak yerine yalnız anlamca en yakın komşular dil modeline gidiyor.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">V = V / np.linalg.norm(V, axis=1, keepdims=True)   # boyu 1 yap
+S = vektorler @ vektorler.T          # her çiftin benzerliği
+np.fill_diagonal(S, -1.0)            # kendisiyle benzerliği yok say
+komsular = np.argsort(-S, axis=1)[:, :len(KOMSU_ESIKLERI)]</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER cümleyi bge-m3 ile sayı listesine çevir
+her listeyi boyu 1 olacak şekilde ölçekle
+benzerlik ← her cümlenin her cümleyle benzerliği
+cümlenin kendisiyle benzerliğini yok say
+HER cümle İÇİN en benzer birkaç cümleyi aday çift yap
+aday çiftleri dil modeline sor</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">import numpy as np
+benzerlik = vektorler @ vektorler.T
+np.fill_diagonal(benzerlik, -1)
+en_yakin = benzerlik.argmax(axis=1)</pre></details><p class="ezber">Önce sayıya çevir, sonra komşuları bul, sonra hakeme sor.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="kavramlar" aria-labelledby="kavram-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="kavram-b">Kavramlar</h2>
+      <p>Hoca bir terimi "bu ne demek?" diye sorarsa iki cümlelik cevaplar.</p>
+    </div>
+    <div class="sozluk">
+      <div class="terim"><b>İsabet (precision)</b><p>İşaretlediklerimizin kaçı gerçekten hata?</p><p class="ornek">100 tespitin 25'i gerçek hataysa isabet %25.</p><p class="hatirla">Okçu: attığın okların kaçı hedefe değdi? İsabet = İşaretlediklerim. Paydada "benim dediklerim" var.</p></div>
+      <div class="terim"><b>Bulma oranı (recall)</b><p>Kitaptaki gerçek hataların kaçını bulduk?</p><p class="ornek">17 gerçek hatanın 6'sını bulduysak %35.</p><p class="hatirla">Balıkçı: göldeki balıkların kaçını ağına aldın? Bulma = Bütün gerçek hatalar. Paydada "kitapta gerçekten olanlar" var.</p></div>
+      <div class="terim"><b>Geliştirme seti / test seti</b><p>Ayarları yalnız geliştirme setine bakarak yaparız; test setini kilitleyip en sonda bir kez çalıştırırız.</p><p class="ornek">Hep aynı örneklere bakarak ayar yaparsak sonuç olduğundan iyi çıkar.</p><p class="hatirla">Deneme sınavı ile gerçek sınav: denemeyle çalışırsın, gerçek sınavın sorularını önceden görmezsin.</p></div>
+      <div class="terim"><b>Ön kayıt</b><p>Başarı ölçütünü denemeden önce yazıp kaydetmek; sonuç kötü çıkınca ölçütü değiştirmemek.</p><p class="ornek">Müfredatta 0,85 önceden yazıldı, 0,82 çıkınca yöntem ürüne girmedi.</p><p class="hatirla">Önce hedefi çiz, sonra oku at. Oku atıp sonra etrafına hedef çizmek hiledir.</p></div>
+      <div class="terim"><b>Temiz doğrulama</b><p>Sonuca bakarak düzeltme yaptıysak o sonuç artık temiz değildir; hiç kullanılmamış yeni bir kitapla yeniden ölçeriz.</p><p class="ornek">Müfredatta Biyoloji 11.</p><p class="hatirla">Cevap anahtarına baktığın sınav artık seni ölçmez; yeni bir sınav (yeni kitap) lazım.</p></div>
+      <div class="terim"><b>Aşırı uyum (overfitting)</b><p>Görülmüş verilere göre yapılan iyileştirmenin yeni veride işe yaramaması.</p><p class="ornek">Yazım modeli yapayda 0,91, gerçekte 60'ta 1.</p><p class="hatirla">Soruları ezberleyen öğrenci: bildiği sorularda 100, yeni sorularda sıfır.</p></div>
+      <div class="terim"><b>Morfolojik analiz</b><p>Kelimeyi kök ve eklerine ayırmak. Ayrılamıyorsa kelime yanlış yazılmış olabilir.</p><p class="ornek">Starlang ve Zemberek.</p><p class="hatirla">Lego: kelime kök + ek parçalarına sökülebiliyorsa doğru; parçalar oturmuyorsa şüpheli. kitap + lar + ımız.</p></div>
+      <div class="terim"><b>Embedding (gömme)</b><p>Cümleyi anlamını temsil eden sayılara çevirmek; sayıları yakın cümleler anlamca benzer.</p><p class="ornek">bge-m3 ile çelişki adayı cümle çiftleri.</p><p class="hatirla">Her cümleye bir haritada adres ver: anlamca yakın cümleler komşu olur.</p></div>
+      <div class="terim"><b>Dil modeli (LLM) hakemi</b><p>Kuralın bulduğu adayı bir dil modeline sorup "terim / alıntı mı, gerçekten hata mı" kararı almak.</p><p class="ornek">gemma4, Ollama ile yerel.</p><p class="hatirla">Kural adayı getirir, hakem düdüğü çalar: "terim mi, alıntı mı, gerçekten hata mı?"</p></div>
+      <div class="terim"><b>Güven skoru</b><p>Tespitin ne kadar güvenilir olduğu: 1 öncelikli, 0,5 kontrol edilecek, 0,25 düşük öncelik.</p><p class="ornek">İki araç da "hata" → 1; biri → 0,5.</p><p class="hatirla">Tam – yarım – çeyrek: 1, 0,5, 0,25. İki tanık "gördüm" derse 1, tek tanık derse 0,5.</p></div>
+      <div class="terim"><b>Kurul ve çoğunluk oyu</b><p>Üç farklı firmanın yapay zekâsı her adayı ayrı oylar; en az ikisi aynı derse karar o olur.</p><p class="ornek">ChatGPT, Gemini, DeepSeek.</p><p class="hatirla">Üç kişilik jüri, iki oy kazanır. Jüri üyeleri sistemi yazanı tanımıyor.</p></div>
+      <div class="terim"><b>Fleiss kappa (κ)</b><p>Birden çok değerlendiricinin, şans eseri uyuşmanın ötesinde ne kadar uyuştuğu. 0 şans düzeyi, 1 tam uyum.</p><p class="ornek">Bizim kurul 0,33: zayıf-orta.</p><p class="hatirla">"Şanstan ne kadar fazla anlaştık?" 0 = yazı-tura, 1 = tam anlaşma. Bizimki 0,33: "biraz anlaştık".</p></div>
+      <div class="terim"><b>Metin katmanı ve basılı sayfa</b><p>PDF'te görünen harf ile içindeki metin farklı olabilir. Hatayı her zaman basılı sayfadan doğrulamak gerekir.</p><p class="ornek">"MEKANİZMALARI" basılıda doğru, metinde "MEKANIZMALARI".</p><p class="hatirla">PDF'in iki yüzü var: gözün gördüğü (basılı) ve bilgisayarın okuduğu (metin). Karar hep gözün gördüğüne göre verilir.</p></div>
+      <div class="terim"><b>İnce ayar / token sınıflandırma</b><p>Hazır bir modeli (BERTurk) kendi verimizle eğitip her kelimeye "doğru / hatalı" etiketi verdirmek.</p><p class="ornek">BERTurk: Türkçe için önceden eğitilmiş BERT.</p><p class="hatirla">Zaten Türkçe bilen öğrenciyi (BERTurk) bizim işe özel bir kursa göndermek.</p></div>
+      <div class="terim"><b>GECTurk</b><p>Türkçe dilbilgisi hatası düzeltme için hazırlanmış veri seti; hata içeren cümle ve doğrusu.</p><p class="ornek">Yazım modelinin eğitim kaynaklarından biri.</p><p class="hatirla">Bilerek hata eklenmiş alıştırma kitabı: hatalı cümle + doğrusu.</p></div>
+      <div class="terim"><b>F1 skoru</b><p>İsabet ile bulma oranının ortalaması (harmonik ortalama); ikisini tek sayıda birleştirir.</p><p class="ornek">Yazım modeli yapay hatalarda F1 0,91.</p><p class="hatirla">İsabet ile bulmanın ortak karnesi. Biri çok düşükse F1 de düşer; zayıf olanı saklayamazsın.</p></div>
+      <div class="terim"><b>Körlemesine etiketleme</b><p>Etiketleyen, sistemin kararını ya da olasılığını görmeden "hata / değil" der; böylece sistemi kayırmaz.</p><p class="ornek">Modelin 60 tespiti olasılıklar görülmeden etiketlendi.</p><p class="hatirla">Kör tadım testi: hangi marka olduğunu bilmeden tat, yoksa sevdiğini kayırırsın.</p></div>
+      <div class="terim"><b>Dil modeli (LLM)</b><p>Çok büyük metinle eğitilmiş, metni anlayıp metin üreten yapay zekâ modeli.</p><p class="ornek">gemma4, ChatGPT, Gemini, DeepSeek.</p><p class="hatirla">Çok kitap okumuş bir "sonraki kelimeyi tahmin et" makinesi.</p></div>
+      <div class="terim"><b>BERT</b><p>Metindeki her kelimeyi bağlamıyla birlikte anlamlandıran model türü. Sınıflandırma ve etiketleme için ince ayar yapılır.</p><p class="ornek">BERTurk: Türkçe metinlerle eğitilmiş BERT.</p><p class="hatirla">Cümleye iki yönden bakar: kelimenin hem solunu hem sağını okur.</p></div>
+      <div class="terim"><b>Token</b><p>Modelin metni böldüğü küçük parça; bir kelime ya da kelimenin bir parçası olabilir.</p><p class="ornek">Yazım modeli her token'a "doğru / hatalı" etiketi verdi.</p><p class="hatirla">Kelimenin dilimleri: uzun bir kelime birkaç token'a bölünebilir.</p></div>
+      <div class="terim"><b>bbox (sınırlayıcı kutu)</b><p>Bir metin bloğunun sayfadaki konumu: sol, üst, sağ, alt koordinatları.</p><p class="ornek">Notlu PDF'te işaret bu kutunun üzerine konuyor.</p><p class="hatirla">Kelimenin etrafındaki görünmez kutu. Sıra: sol, üst, sağ, alt.</p></div>
+      <div class="terim"><b>VRAM</b><p>Ekran kartının belleği. Dil modelleri burada çalışır; dolarsa model ya da sürücü çöker.</p><p class="ornek">RTX 4060, 8 GB; 1 GB boş bırakılıyor.</p><p class="hatirla">Ekran kartının masası: model masaya sığmazsa her şey yere düşer (çökme). 8 GB masa, 1 GB boş bırak.</p></div>
+      <div class="terim"><b>PDF yorum notu (annotation)</b><p>PDF'in metnini değiştirmeden üstüne eklenen not, çizgi ya da çerçeve. Her PDF okuyucuda görünür.</p><p class="ornek">Notlu PDF.</p><p class="hatirla">Kitabın üstüne yapışkan not: kitabın yazısını değiştirmez, kaldırılabilir.</p></div>
+      <div class="terim"><b>Ajan (agent)</b><p>Kendisine verilen görevi adım adım kendi başına yapan yapay zekâ: kod yazar, çalıştırır, rapor verir.</p><p class="ornek">Görevleri ajana verdim, raporunu Claude'a kontrol ettirdim.</p><p class="hatirla">Görevi verip bıraktığın stajyer: kendi çalışır, rapor getirir; ama raporu kontrol edersin (şişirilmiş %90).</p></div>
+      <div class="terim"><b>Birim testi ve gerileme testi</b><p>Birim testi bir parçanın doğru çalıştığını kontrol eder. Gerileme testi, yeni değişikliğin eskiden çalışan bir şeyi bozmadığını kontrol eder.</p><p class="ornek">56 eklenmiş hatalık gerileme seti: 55 bulunmalı.</p><p class="hatirla">Birim = tek tuğla sağlam mı? Gerileme = yeni tuğla eski duvarı yıktı mı?</p></div>
+      <div class="terim"><b>Commit</b><p>Git'te kodun o anki hâlinin açıklamasıyla kaydedilmesi. Her adım geri dönülebilir ve kanıtlanabilir oluyor.</p><p class="ornek">12b606b, 854559a.</p><p class="hatirla">Oyundaki kayıt noktası: istediğin an o ana geri dönersin.</p></div>
+      <div class="terim"><b>Ölçülen sürümü sabitlemek</b><p>Ölçümden önce kodun son hâlini bir commit'le kilitlemek; sonuç tam olarak o koda ait olur.</p><p class="ornek">İkinci ölçüm 854559a ile yapıldı.</p><p class="hatirla">Fotoğraftan önce "kimse kıpırdamasın": sonuç tam o koda (854559a) ait olsun.</p></div>
+      <div class="terim"><b>Güven ile öncelik farkı</b><p>Güven: tespitin doğru olma ihtimali. Öncelik: editörün önce bakması gereken sıra (öncelikli, kontrol edilecek, düşük öncelik).</p><p class="ornek">Kesme "kontrol edilecek" önceliğinde girdi.</p><p class="hatirla">Güven: "ne kadar eminim?" Öncelik: "editör önce hangisine baksın?"</p></div>
+      <div class="terim"><b>Doğru-yanlış (D/Y) etkinlikleri</b><p>Kitapta öğrencinin doğru mu yanlış mı diye işaretleyeceği, bilerek yanlış yazılmış cümleler; çelişki sanılıyordu.</p><p class="ornek">Artık karşılaştırılmıyor.</p><p class="hatirla">Bilerek yanlış yazılmış cümle bir tuzaktır, çelişki değildir.</p></div>
+      <div class="terim"><b>Test modu</b><p>İnceleme sayfasında kitaba bilerek eklenen çelişkileri gösteren mod; sistemin bulduğu yeri göstermek için.</p><p class="ornek">Sosyal Bilgiler 6 ile.</p><p class="hatirla">Saklambaçta saklanma yerlerini bildiğin oyun: sistemin onları bulduğunu göstermek için.</p></div>
+      <div class="terim"><b>Olumsuz sonuç</b><p>Denenen yöntemin ölçütü geçmemesi. Gizlenmez, gerekçesiyle raporlanır.</p><p class="ornek">Yazım modeli, müfredatta dil modeli, okunabilirlikte sınıf tahmini.</p><p class="hatirla">"İşe yaramadı" da bir sonuçtur. Gizlenmez, nedeniyle raporlanır.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="araclar" aria-labelledby="arac-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="arac-b">Kullanılan bütün araçlar</h2>
+      <p>Raporların 4. bölümündeki teknolojiler: ne olduğu, nasıl çalıştığı ve projede ne işe yaradığı.</p>
+    </div>
+    <div class="tablo-kap">
+      <table class="hata-tablo">
+        <thead><tr><th>Araç</th><th>Ne</th><th>Nasıl çalışıyor</th><th>Projede ne için</th></tr></thead>
+        <tbody>
+          <tr><td class="n">Python</td><td>Programlama dili</td><td>Bütün sistem; arayüz HTML, CSS, JavaScript</td></tr>
+          <tr><td class="n">PyMuPDF</td><td>PDF okuma ve yazma kütüphanesi</td><td>Metni konumuyla çıkarmak, basılı sayfa no, kalın/italik bilgisi, PDF'e not eklemek, sayfa görüntüsü almak. Sürüm 1.28.2</td></tr>
+          <tr><td class="n">re (düzenli ifadeler)</td><td>Metinde kalıp arama</td><td>Bir kalıp yazılır; re metni tarayıp kalıba uyan yerleri bulur ya da değiştirir. Örneğin "bir kelimeden sonra ayrı yazılmış de/da" bir kalıptır.</td><td>Cümle bölme, kısaltmaları koruma, tire birleştirme, TDK kuralları, kapaktan sınıfı bulma</td></tr>
+          <tr><td class="n">JSON</td><td>Veri dosyası biçimi</td><td>Veriyi düz metin olarak anahtar-değer biçiminde yazar: {"sayfa": 12, "metin": "..."}. Python bunu tekrar sözlük ve listeye çevirir; böylece bir adımın sonucu dosyadan okunup sonraki adıma geçiyor.</td><td>Blokları ve tespitleri kaydetmek; her modül PDF'i yeniden okumadan çalışıyor</td></tr>
+          <tr><td class="n">venv, pip</td><td>Projeye özel Python ortamı ve paket kurucu</td><td>venv projeye ayrı bir Python klasörü (.venv) kurar. pip bu klasöre paketleri istenen sürümle indirir (requirements.txt). Bilgisayardaki başka Python'lar ve sürümler karışmaz.</td><td>Kütüphane sürümlerini sabitlemek (.venv)</td></tr>
+          <tr><td class="n">unittest</td><td>Python'un test kütüphanesi</td><td>"test_" ile başlayan fonksiyonlar yazılır; içlerinde assertEqual gibi komutlarla gerçek sonuç beklenenle karşılaştırılır. Tek komut bütün testleri çalıştırır ve geçmeyeni gösterir.</td><td>Otomatik testler: 49 → 138 → 196 → 267</td></tr>
+          <tr><td class="n">Git, GitHub</td><td>Sürüm kontrolü</td><td>Her commit, dosyaların o anki hâlinin kaydıdır ve kısa bir kimliği vardır (ör. 12b606b). İstenen ana geri dönülebilir, iki an arasındaki fark görülebilir. GitHub aynı kaydın internetteki kopyası.</td><td>Her adımı commit'le kaydetmek; ölçülen sürümü sabitlemek</td></tr>
+          <tr><td class="n">Starlang (NlpToolkit)</td><td>Türkçe morfoloji aracı</td><td>Kelimeyi kök ve eklere ayırmaya çalışır (morfolojik çözümleme): "kitaplarımız" → kitap + lar + ımız. Sözlüğündeki kökler ve Türkçenin ek kurallarıyla hiçbir çözümleme bulamazsa kelime şüpheli sayılıyor.</td><td>Yazımda ana denetçi: kelime kök ve eklere ayrılıyor mu</td></tr>
+          <tr><td class="n">Zemberek</td><td>Türkçe morfoloji aracı</td><td>Aynı işi yapar ama sözlüğü ve kuralları farklı, başka bir ekip yazmış. Bu yüzden ikinci görüş olarak işe yarıyor: iki araç birlikte "tanımıyorum" derse güven yüksek. Kelimenin özel ad olup olmadığını da söylediği için kesme denetiminde kullanılıyor.</td><td>Yazımda ikinci görüş; kesme denetiminde özel adı tanımak</td></tr>
+          <tr><td class="n">Hunspell</td><td>Yazım denetimi sözlüğü</td><td>Bir kök sözlüğü ve bir ek kuralları dosyasıyla kelimeyi eşleştirir. Türkçe gibi bol ekli bir dilde bütün ek dizilerini kapsayamadı; 80 sahte hata verdi.</td><td>Hafta 4'te denendi, Starlang ve Zemberek seçildi</td></tr>
+          <tr><td class="n">Ollama</td><td>Dil modellerini bilgisayarda çalıştıran program</td><td>Model dosyasını indirir, ekran kartı belleğine yükler ve bilgisayarda yerel bir sunucu açar (127.0.0.1:11434). Kodumuz bu adrese bir istek (prompt) gönderir, modelin cevabını alır. İnternete hiçbir şey gitmez.</td><td>Bütün yerel modeller; ücret yok, kitap dışarı gitmiyor</td></tr>
+          <tr><td class="n">gemma4</td><td>Google'ın açık dil modeli</td><td>Çelişki kararı ve yazım hakemi; 6 model arasından seçildi</td></tr>
+          <tr><td class="n">Turkish-Gemma</td><td>Türkçe için uyarlanmış Gemma</td><td>Gemma modelinin Türkçe metinlerle ek olarak eğitilmiş hâli. Aynı soru ona da soruluyor; cevabı ikinci oy oluyor.</td><td>Çelişkide ikinci görüş (yalnız güveni artıran oy)</td></tr>
+          <tr><td class="n">bge-m3</td><td>Embedding modeli</td><td>Anlamca benzer cümleleri ve müfredatta en benzer paragrafları bulmak</td></tr>
+          <tr><td class="n">NumPy</td><td>Sayısal hesap kütüphanesi</td><td>Bütün vektörleri tek bir tablo (matris) olarak tutar. Vektörler önce boyları 1 olacak şekilde ölçekleniyor; sonra tek bir matris çarpımıyla (vektorler @ vektorler.T) her cümle çiftinin benzerliği (kosinüs benzerliği) aynı anda hesaplanıyor.</td><td>Embedding vektörleri arasında benzerlik hesabı</td></tr>
+          <tr><td class="n">openpyxl</td><td>Excel dosyası kütüphanesi</td><td>Bir Excel dosyası aslında içinde XML dosyaları olan bir zip'tir. openpyxl bunu açmadan, Python'dan hücreleri, sayfaları, açılır listeleri ve formülleri yazar ve geri okur.</td><td>Excel raporunu oluşturmak ve editörün doldurduğu dosyayı geri okumak</td></tr>
+          <tr><td class="n">Kelime sıklığı listesi</td><td>Türkçe kelimelerin kullanım sıklığı</td><td>Büyük bir metin derleminde her kelimenin kaç kez geçtiği sayılmış. Seyrek geçen kelime "zor" kabul edilir; paragraftaki seyrek kelime oranı zorluk ölçüsü olarak denendi.</td><td>Okunabilirlikte kelime zorluğunu ölçme denemesi (işe yaramadı)</td></tr>
+          <tr><td class="n">PyTorch (CUDA)</td><td>Derin öğrenme kütüphanesi; CUDA ekran kartında çalıştırır</td><td>Model milyonlarca sayıdan (ağırlık) oluşur. Eğitimde model bir tahmin yapar, hatası hesaplanır ve ağırlıklar hatayı azaltacak yönde azar azar değiştirilir. CUDA bu çok sayıda çarpmayı ekran kartında aynı anda yapar.</td><td>Yazım modelini eğitmek</td></tr>
+          <tr><td class="n">Hugging Face transformers</td><td>Hazır yapay zekâ modellerini kullanma kütüphanesi</td><td>Hazır bir modeli adıyla indirir; metni modelin anlayacağı parçalara bölen tokenizer'ıyla birlikte kullanıma hazır verir. Biz modelin üstüne kelime başına sınıf veren bir katman ekledik (AutoModelForTokenClassification).</td><td>BERTurk'ü indirip ince ayar yapmak</td></tr>
+          <tr><td class="n">BERTurk</td><td>Türkçe metinlerle eğitilmiş BERT modeli</td><td>Türkçe metinlerde gizlenmiş kelimeyi tahmin ederek dili öğrenmiş bir model. İnce ayarda her kelimeye beş sınıftan birini vermeyi öğrendi: doğru, harf hatası, bitişik/ayrı, büyük/küçük harf, diğer kural.</td><td>Yazım modelinin temeli</td></tr>
+          <tr><td class="n">GECTurk</td><td>Türkçe dilbilgisi hatası veri seti</td><td>Doğru cümlelere 25 yazım kuralıyla bilerek hata eklenmiş (ör. "ya da" → "yada") hatalı-doğru cümle çiftleri. Hangi kelimenin hatalı olduğu bilindiği için model bunlardan öğrenebiliyor.</td><td>Yazım modelinin eğitim verisi</td></tr>
+          <tr><td class="n">Vikipedi API ve değişiklik geçmişi</td><td>Vikipedi maddelerinin eski ve yeni hâlleri</td><td>Açıklamasında "yazım, imla, typo" geçen küçük değişiklikler seçildi; API ile değişiklikten önceki ve sonraki hâl karşılaştırıldı. Değişiklik yalnızca küçük bir yazım düzeltmesiyse (en fazla 2 harf, şapka, büyük/küçük harf, kesme, bitişik/ayrı) eski cümle hatalı örnek oldu; anlamı değiştiren satırlar atıldı.</td><td>~28 bin gerçek "hata → düzeltme" cümlesi toplamak</td></tr>
+          <tr><td class="n">ChatGPT, Gemini, DeepSeek</td><td>Üç farklı firmanın dil modeli</td><td>Üçüne aynı talimat ve aynı aday listesi verildi. Her biri her aday için "hata / hata değil / emin değilim" oyu verdi; adayın sistemden mi sayfa okumasından mı geldiğini görmediler. Kararı çoğunluk verdi (en az 2 oy).</td><td>Bağımsız değerlendirme kurulu</td></tr>
+          <tr><td class="n">Claude</td><td>Anthropic'in dil modeli</td><td>Yazışarak iş verilir. Bilgisayarda dosyaları okuyup kod yazar, komut çalıştırır, sonucu okuyup düzeltir. Ajanlar ayrı görevleri yapan Claude oturumları; raporlarını kodu yeniden çalıştırarak kontrol ettik.</td><td>Kodu yazmak, ajan raporlarını kontrol etmek, kararları tartışmak</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="sorular" aria-labelledby="soru-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="soru-b">Soru bankası</h2>
+      <p>Önce soruyu sesli cevapla, sonra açıp karşılaştır. Bildiklerini "Biliyorum" ile işaretle; işaretler bu tarayıcıda saklanır.</p>
+    </div>
+    <div class="kart-modu" id="kart" hidden>
+      <div class="arac-satir"><span class="kat" id="kart-kat" style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--mavi)"></span></div>
+      <div class="q" id="kart-soru"></div>
+      <div id="kart-cevap" hidden></div>
+      <div class="arac-satir">
+        <button class="dugme" id="kart-goster" type="button">Cevabı göster</button>
+        <button class="dugme ikincil" id="kart-bil" type="button">Biliyorum</button>
+        <button class="dugme ikincil" id="kart-sonraki" type="button">Sonraki soru</button>
+        <button class="dugme ikincil" id="kart-kapat" type="button">Listeye dön</button>
+      </div>
+    </div>
+    <div class="arac">
+      <div class="arac-satir" id="filtreler" role="group" aria-label="Konuya göre süz"></div>
+      <div class="arac-satir">
+        <label for="ara" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Sorularda ara</label>
+        <input class="ara" id="ara" type="search" placeholder="Sorularda ara (ör. kappa, müfredat)">
+        <button class="dugme" id="rastgele" type="button">Rastgele soru sor</button>
+        <button class="cip" id="sadece-bilinmeyen" type="button" aria-pressed="false">Yalnız bilmediklerim</button>
+      </div>
+      <div class="ilerleme"><span id="ilerleme-metin">0 / 0 biliniyor</span><div class="cubuk"><span id="ilerleme-cubuk"></span></div></div>
+    </div>
+    <div class="sorular" id="liste"></div>
+  </div>
+</section>
+
+<section class="cerceve" id="yapayzeka" aria-labelledby="yz-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="yz-b">Yapay zekâ ve ben</h2>
+      <p>Raporların 9. bölümü değerlendirmede önemli: hoca kodu yazıp yazmadığından çok, yapılanı anlayıp anlamadığına ve doğrulayıp doğrulamadığına bakıyor. Raporlarda yazdığınla tutarlı cevap ver.</p>
+    </div>
+    <div class="iki">
+      <div class="not-kutu">
+        <h3>Raporlarda ne dedin?</h3>
+        <ul>
+          <li>Kodun tamamına yakınını yapay zekâ (Claude) yazdı; bu seviyede kodu kendim yazamam.</li>
+          <li>Kullanım oranı: %95 (Hafta 4 ve 8).</li>
+          <li>Kurul için ChatGPT, Gemini, DeepSeek; ana geliştirme Claude ile.</li>
+          <li>"Yapay zekâ olmasaydı görevleri tamamlayamazdım."</li>
+        </ul>
+      </div>
+      <div class="not-kutu">
+        <h3>Senin katkın</h3>
+        <ul>
+          <li>Yönü belirlemek, ne yapılacağını anlatmak, seçenekler arasında karar vermek ("tartışarak karar verdim").</li>
+          <li>Kitapları ve verileri bulup indirmek.</li>
+          <li>Sonuçları inceleme sayfasından kontrol etmek; ajan raporlarını başka bir yapay zekâya kontrol ettirmek.</li>
+          <li>Fikirler: yerel modeli üçüncü görüş yapmak (sonra yazım hakemi oldu), model eğitmek, arayüzü gerçek bir admin paneline çevirmek.</li>
+        </ul>
+      </div>
+      <div class="not-kutu">
+        <h3>Yapay zekânın hatasını yakaladığın yerler</h3>
+        <ul>
+          <li><b>Hafta 4:</b> test setinde kuralına aykırı bir madde ve "Hz." kısaltması yüzünden yanlış puanlama.</li>
+          <li><b>Hafta 6:</b> demo kodundaki isim çakışması; "demo her şeyi gösteriyor mu" sorunla bulundu.</li>
+          <li><b>Hafta 8:</b> ajanın şişirilmiş oranı; ölçüm betiği kodu çalıştırmıyordu.</li>
+        </ul>
+      </div>
+      <div class="not-kutu">
+        <h3>Nasıl doğruladın?</h3>
+        <ul>
+          <li>Kodu çalıştırarak; testlerle (her hafta hepsi geçiyor).</li>
+          <li>Ajanın raporunu ikinci bir yapay zekâya kontrol ettirerek; sayılar yeniden hesaplandı.</li>
+          <li>Şüpheli tespitlerde basılı sayfanın görüntüsüne bakarak.</li>
+          <li>Sistemi yazmayan üç yapay zekâdan oluşan kurulla bağımsız ölçerek.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cerceve" id="zor" aria-labelledby="zor-b">
+  <div class="ic">
+    <div class="bolum-bas">
+      <h2 id="zor-b">Zor sorular ve dürüst cevaplar</h2>
+      <p>Projenin zayıf yerleri. Saklamak yerine bildiğini göster: neyi ölçtüğünü, sonucun neden böyle çıktığını ve ne yaptığını söyle.</p>
+    </div>
+    <div class="zayif">
+      <div class="z"><b>"Bulma oranınız çok düşük, sistem işe yarıyor mu?"</b><p class="soyle">Doğal kitap hatalarını bulma oranı düşük; bunu kendi bağımsız ölçümümüzle gördük ve ürünün içine yazdık. Kaçanlar çoğunlukla eksik virgül ve kendi başına doğru ama yanlış kullanılmış kelimeler; kurallar bunları göremiyor. Bu yüzden sayfayı baştan sona okuyan yerel model ekledik; etkisini yeni kitapta ölçeceğiz.</p></div>
+      <div class="z"><b>"Kurul da yapay zekâ, bağımsız mı?"</b><p class="soyle">Tam bir insan uzman ölçümü değil; ama sistemi yazan modelden farklı üç firmanın modeli, adayların nereden geldiğini görmeden, çoğunlukla karar verdi. Kurulun kendi uyumunu da ölçtük (κ = 0,33, zayıf-orta), yani sınırını biliyoruz.</p></div>
+      <div class="z"><b>"Okunabilirlik sınıfı ayırt etmiyorsa neden üründe?"</b><p class="soyle">Ölçtük ve ayırt etmediğini raporladık. Bu yüzden "sınıf düzeyi" değil "dilsel karmaşıklık uyarısı" olarak, "buraya bir bakın" anlamında duruyor.</p></div>
+      <div class="z"><b>"Eğittiğiniz model neden ürüne girmedi?"</b><p class="soyle">Ölçütü eğitimden önce yazmıştık; gerçek kitapta 60 tespitten yalnız 1'i gerçek hata çıktı. Ölçütü geçmeyen bir şeyi ürüne koymadık ve olumsuz sonuç olarak raporladık. Modelin bulduğu tek hata bize kesme denetimi eksikliğini gösterdi.</p></div>
+      <div class="z"><b>"Kodu sen mi yazdın?"</b><p class="soyle">Hayır, kodu yapay zekâya yazdırdım; raporlarda da açıkça yazdım. Ben yönü belirledim, kararları verdim, sonuçları ve ajan raporlarını kontrol ettirdim. Her modülün ne yaptığını ve nasıl ölçüldüğünü anlatabilirim.</p></div>
+      <div class="z"><b>"Bilgi tutarsızlığı bilginin doğruluğuna da bakıyor mu?"</b><p class="soyle">Hayır, yalnız kitabın kendi içindeki çelişkilere bakıyor. Dış kaynakla doğruluk kontrolü yapmıyor.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="cerceve"><div class="ic">Kaynak: Haftalık Yazılım Projesi Gelişim Raporları (ilk rapor ve Hafta 4, 5, 6, 8) ve proje kayıtları. "Son durum" sekmesi henüz rapora girmeyen çalışmaları özetler.</div></footer>
+
+<script>
+const SORULAR = [
+  // Genel
+  ["Genel", "Projeyi kısaca anlatır mısın?", "MEB ders kitabının PDF'ini alıp dört konuda olası hata bulan bir sistem: yazım ve noktalama, okunması ağır paragraflar, kitap içi bilgi çelişkileri ve müfredat anahtar kavramları. Her tespit sayfa/paragraf numarası, açıklama ve güven skoru taşıyor. Sonuçlar tarayıcı programında, kitabın PDF'ine eklenen notlarda ve Excel raporunda. Modeller yerel çalışıyor."],
+  ["Genel", "Sistem hangi kriterlere bakıyor?", "Dört kriter: okunabilirlik (sınıf düzeyine göre ağır paragraflar), yazım ve noktalama (kesme işareti dahil), bilgi tutarsızlığı (kitabın kendi içindeki çelişkiler) ve müfredat uyumu (anahtar kavramlar)."],
+  ["Genel", "Projeyi hangi fazlara ayırdınız?", "Faz 1: üç kriter (okunabilirlik, yazım, tutarlılık) ve test setleri. Faz 2: editörün kullanacağı çıktılar (notlu PDF, Excel) ve yanlış alarmları azaltma. Faz 3: müfredat; ardından yazımın güçlendirilmesi ve bağımsız ölçüm."],
+  ["Genel", "Neden yerel dil modeli kullandınız?", "API ücreti yok, kitap dışarı gönderilmiyor (MEB verisi), internet gerekmiyor. Ollama ile kendi bilgisayarımda gemma4 çalışıyor."],
+  ["Genel", "Güven skoru nedir, nasıl veriliyor?", "Tespitin ne kadar güvenilir olduğu. İki araç da hata derse 1 (öncelikli), yalnız biri derse 0,5 (kontrol edilecek). Terim, alıntı, bozuk PDF parçası gibi ipuçları varsa 0,25'e iner ama silinmez."],
+  ["Genel", "Neden tespitleri silmiyorsunuz?", "Yanlışlıkla gerçek bir hatayı kaybetmemek için. Tespit sebebi yazılarak listenin altına iniyor; editör isterse görüyor."],
+  ["Genel", "Blok nedir?", "PDF'ten çıkan metin parçası: sayfa no, paragraf no, sayfadaki konum (bbox), metin ve türü (paragraf, kısa, bozuk, simge). Her kriter yalnız kendine uygun blokları inceliyor."],
+  ["Genel", "Sonuçlar kullanıcıya nasıl gösteriliyor?", "Üç yolla: tarayıcıda açılan inceleme programı (INCELE.bat), kitabın kendi PDF'ine eklenen yorum notları (kırmızı dalgalı çizgi yazım, turuncu çerçeve ağır paragraf, mor çelişki) ve editörün karar verebildiği Excel raporu."],
+  // Hafta 4
+  ["Hafta 4", "Yazımda hangi araçları denediniz, hangisini seçtiniz?", "Hunspell, Zemberek ve Starlang denendi. Starlang ana denetçi, Zemberek ikinci görüş oldu. İkisi de hata derse güven 1, yalnız biri derse 0,5. Yanına 7 TDK kuralı eklendi."],
+  ["Hafta 4", "Yazımın ilk denemesinde neden çok tespit çıktı?", "623 tespit çıktı; çoğu özel isim ve harita etiketiydi. Morfoloji araçları sözlükte olmayan her kelimeye hata diyor. Önlemlerden sonra 77'ye indi: 3+ geçen kelime terim, büyük harfle başlayanlar atlandı, bozuk bloklar ayrıldı, dil modeli hakemi eklendi."],
+  ["Hafta 4", "Kitapta bulduğunuz gerçek yazım hatalarına örnek ver.", "\"kisisel gelisimimiz\", \"jandama\", \"kullanmışladır\", \"planınında\"."],
+  ["Hafta 4", "\"jandama\" örneğinde ne sorun çıktı?", "Dil modeli hakemi \"jandama\"yı \"jandarma\" sanıp doğru dedi. Bu yüzden kitapta geçen bir kelimeye tek harf uzak olan kelimeyi hakem düşüremiyor kuralı eklendi."],
+  ["Hafta 4", "Bilgi tutarsızlığı kriteri nasıl çalışıyor?", "bge-m3 cümleleri sayıya çevirip anlamca benzer çiftleri buluyor; gemma4 bu çiftin çelişip çelişmediğine, cümlenin geçtiği başlığı da görerek karar veriyor; Turkish-Gemma ikinci görüş. İkisi de çelişki derse güven 1, yalnız gemma4 derse 0,5."],
+  ["Hafta 4", "Çelişki modelini nasıl seçtiniz?", "6 modeli 31 cümle çiftiyle yarıştırdık; gemma4 seçildi."],
+  ["Hafta 4", "İlk tutarlılık denemesindeki 21 çelişki neden yanlıştı?", "Cümleler modele tek başına verilmişti; hangi ülke ya da iklimden bahsedildiği başlıkta yazıyordu. Ayrıca doğru-yanlış etkinlikleri ve test şıkları bilerek yanlış yazılmış. Çözüm: cümlenin geçtiği yer de verildi, şıklar ve karakter konuşmaları iddia sayılmadı, Turkish-Gemma yalnız destek oyu oldu."],
+  ["Hafta 4", "Test setlerini nasıl hazırladınız?", "Kitaplara bilerek 50 çelişki ve 80 yazım hatası eklendi. Bir kısmı ayar yapmak için geliştirme setine ayrıldı, kalanı kilitlendi ve en sonda bir kez çalıştırıldı."],
+  ["Hafta 4", "Test setlerinde sonuç ne çıktı?", "Yazımda eklenen 56 hatanın 55'i bulundu. Tutarlılıkta eklenen 35 çelişkinin 27'si (%77) bulundu ve bulunanların hepsi doğruydu."],
+  ["Hafta 4", "Bilgisayar neden çöktü, ne yaptınız?", "Modeller saatlerce çalışırken ekran kartı belleği doldu, sürücü sıfırlandı, şarj da çıkmıştı. OLLAMA_BASLAT.bat ekran kartında 1 GB boş bırakıyor ve aynı anda tek model çalışıyor; donanim.py pil, sıcaklık ve RAM'e bakıp gerekirse işi bekletiyor."],
+  // Hafta 5
+  ["Hafta 5", "Okunabilirlik formülleri sınıf düzeyini ayırt ediyor mu?", "Hayır. Biyoloji 9-10-11 ve TDE 9-10-11 ile ölçtük, aynı dersin farklı sınıflarını ayırt etmedi; 11. sınıf Matematik 6. sınıftan kolay çıktı. Kelime sıklığı ve dil modeline sınıf tahmini de işe yaramadı (her kitaba 9. sınıf dedi). Bu yüzden \"dilsel karmaşıklık uyarısı\" olarak kaldı."],
+  ["Hafta 5", "Hangi okunabilirlik formüllerini kullandınız, neye bakıyorlar?", "Ateşman, Çetinkaya-Uzun ve Bezirci-Yılmaz. Kelime uzunluğuna (hece sayısı) ve cümle uzunluğuna bakıyorlar; yani yüzeysel ölçüler."],
+  ["Hafta 5", "Notlu PDF nedir?", "Sistem bulduğu hataları kitabın kendi PDF'ine yorum notu olarak ekliyor: yazım kırmızı dalgalı çizgi, ağır paragraf turuncu çerçeve, çelişen iki cümle mor ve birbirine bağlı. Kitabın metni değişmiyor."],
+  ["Hafta 5", "Excel raporu ne işe yarıyor?", "Her satır bir tespit. Editör \"Hata / Hata değil / Emin değilim\" seçince özet sayfası isabeti kendisi hesaplıyor. Dolu dosya sisteme geri okunabiliyor."],
+  ["Hafta 5", "Alıntıları nasıl tanıyorsunuz, neden gerekli?", "Edebiyat kitaplarında şiir ve eski metinlerdeki kelimeler hata sayılıyordu. Alıntıyı imza satırından, tiyatro repliklerinden ve kalın yazılmış yazar adından tanıyoruz; bu tespitler alta iniyor."],
+  ["Hafta 5", "Faz 2'de yanlış alarmlar ne kadar azaldı?", "9 kitapta gösterilen yazım tespitleri 2.743'ten 628'e indi; etiketli örneklerdeki 37 gerçek hatanın hiçbiri kaybolmadı."],
+  ["Hafta 5", "Bu ölçümü neden \"temiz değil\" diye raporladınız?", "Hiç bakmadığımız kitaplarda denerken 2 gerçek hatanın (\"sorumluklar\", \"söyleyebillirsiniz\") yanlışlıkla alta indiğini gördük ve düzelttik. Düzeltmeyi test kitabını gördükten sonra yaptığımız için o ölçüm artık bağımsız sayılmaz."],
+  ["Hafta 5", "Satır birleştirme neden gerekti?", "PDF bazı kutularda her satırı ayrı parça okuyordu (TDE 12'de 9.745 parçanın 2.551'i bir öncekinin devamıydı). Cümleler yarıdan başlıyor, satır başı ve sonu kelimeleri denetlenmiyordu. Tek satırlık, çok yakın, hizalı, sütunu dolduran ve cümlesi yarım kalan satırlar alttakiyle birleştiriliyor."],
+  ["Hafta 5", "Müfredat kontrolünde hangi yöntemleri denediniz?", "İki yöntem: dil modeline \"bu öğrenme çıktısı kitapta işleniyor mu\" diye sormak ve programın anahtar kavramlarının kitapta geçip geçmediğine bakmak. Başarı ölçütünü önceden yazdık."],
+  ["Hafta 5", "Müfredatta dil modeli yöntemi neden ürüne girmedi?", "Ölçüt 0,85'ti, kitapta olan çıktıların 22'de 18'ini buldu (0,82); çıkarılan temanın da yalnız yarısına \"yok\" dedi. Doğru sayfayı 18/18 buluyordu ama karar zayıftı. Önceden yazdığımız kurala uyup yalnız anahtar kavram kontrolünü ürüne koyduk."],
+  ["Hafta 5", "Müfredatta \"kapak sorunu\" neydi?", "Modelin en benzer bulduğu paragraf çoğu zaman tema kapak sayfasıydı; kapakta programın içerik listesi aynen yazıyor ama konu orada anlatılmıyor. Kapak, içindekiler ve tanıtım sayfaları aramadan çıkarıldı; karar hiç kullanılmamış Biyoloji 11 ile verildi."],
+  ["Hafta 5", "Öğrenme çıktısı, içerik çerçevesi ve anahtar kavram nedir?", "MEB öğretim programının parçaları: öğrenme çıktısı öğrencinin kazanması gereken beceri, içerik çerçevesi işlenecek konular, anahtar kavramlar o temada geçmesi gereken terimler."],
+  ["Hafta 5", "Anahtar kavram kontrolü neler buldu?", "Biyoloji 9'da \"polimerizasyon\" yalnız kapakta geçiyor. Sosyal Bilgiler 6 programın son üç öğrenme alanını kapsamıyor (o alanlar ikinci ciltte)."],
+  // Hafta 6
+  ["Hafta 6", "6. haftada ne yaptınız?", "Demoyu baştan sona çalıştırdık ve 3. adımda (yazım) çöktüğünü bulduk. Hatayı düzelttik, aynı hatayı yakalayan test ekledik; demo 7 adımı tamamladı."],
+  ["Hafta 6", "Demodaki hata neydi?", "Demo fonksiyonunda bir değişkenin adı (dusuk_oncelik) kullanılan bir modülün adıyla aynıydı. Python fonksiyonda bir ada değer atanınca o adı fonksiyonun tamamında yerel değişken sayıyor; yukarıdaki satır modülü değil, henüz değeri olmayan değişkeni gördü: UnboundLocalError."],
+  ["Hafta 6", "Hata neden bir hafta fark edilmedi?", "Her modülün testleri geçiyordu; hata modülleri sırayla çalıştıran demo dosyasındaydı ve demo 21 Ekim'den sonra hiç uçtan uca çalıştırılmamıştı."],
+  ["Hafta 6", "Aynı hatayı nasıl önlediniz?", "Değişkenin adı dusuk_sayisi yapıldı. Demodaki değişken adlarının hiçbir modül adıyla aynı olmadığını kontrol eden bir test eklendi. Ayrıca her yeni özellikten sonra demoyu uçtan uca çalıştırma kararı aldık."],
+  // Hafta 8
+  ["Hafta 8", "Yazım modelini nasıl eğittiniz?", "BERTurk üzerine her kelimeye \"doğru / hatalı\" etiketi veren bir model (token sınıflandırma). Veri: GECTurk, Vikipedi değişiklik geçmişinden ~28 bin gerçek hata-düzeltme cümlesi ve kitap cümlelerine eklenen yapay hatalar; toplam ~205 bin cümle. Ölçüt eğitimden önce yazıldı."],
+  ["Hafta 8", "Yazım modeli neden başarısız oldu?", "Yapay hatalarda 0,91 aldı ama gerçek kitapta yeni bulduğu tespitlerden körlemesine bakılan 60'ın yalnız 1'i gerçek hataydı. Eğitim verisi çoğunlukla yapaydı; gerçek kitapta araçların tanımadığı kelimeler ise terim, eski metin, özel ad ve bozuk PDF kelimesi. Model bunları hata sandı."],
+  ["Hafta 8", "Başarısız modelden ne öğrendiniz?", "Bulduğu tek gerçek hata \"Türkistanda\" sözlükte olan ama TDK'ya aykırı bir kesme hatasıydı. Bu, sistemde kesme denetimi olmadığını gösterdi; kural tabanlı kesme denetimini yazdık."],
+  ["Hafta 8", "Kesme işareti denetimi nasıl çalışıyor?", "Özel ada, kısaltmaya ve sayıya gelen eklerde eksik ya da gereksiz kesmeyi arıyor. Özel adı Zemberek tanıyor; yanlış alarmı azaltmak için kitabın aynı adı başka bir yerde kesmeyle yazmış olması şartı var. Doğrulamada 46 tespitin 31'i (%67) gerçek; \"kontrol edilecek\" düzeyinde ürüne girdi."],
+  ["Hafta 8", "Bağımsız değerlendirmeyi neden yaptınız?", "Başarı sayılarımızın çoğunu sistemi geliştiren yapay zekâ etiketlemişti ve ölçümler yalnız bilerek eklenmiş hatalarla yapılmıştı. Kitaptaki gerçek hataların kaçının bulunduğu bilinmiyordu."],
+  ["Hafta 8", "Bağımsız değerlendirmeyi nasıl yaptınız?", "ChatGPT, Gemini ve DeepSeek'ten kurul kurduk. Sistemin çıktısını önceden kilitledik; adayları karışık sırada ve nereden geldikleri gizli verdik; en az ikisi aynı derse karar o oldu. Kurulun uyumunu Fleiss kappa ile ölçtük (0,33)."],
+  ["Hafta 8", "Bağımsız ölçümün sonucu ne çıktı?", "İşaretlenenlerin yaklaşık dörtte biri gerçek hata. İlk ölçümde gerçek hataların 6/17'si (%35) bulundu; doğal kitap hatalarını bulma oranı genel olarak düşük. Kaçanlar: eksik virgül, kendi başına doğru ama yanlış kullanılmış kelimeler, dizgi hataları."],
+  ["Hafta 8", "\"İ\" harfi sorunu neydi?", "PDF'in metni bazı fontlarda \"İ\"yi \"I\" olarak veriyor; basılı sayfada doğru. Büyük harf kuralının bulduklarının çoğu ve ilk ölçümdeki 4 \"gerçek hata\" basılı sayfada yoktu. Düzeltince bulma 6/21 yerine 6/17 oldu. PDF okuma yalnız yanlış okunan \"İ\"leri düzeltecek şekilde değiştirildi."],
+  ["Hafta 8", "Ajanın şişirilmiş oranını nasıl yakaladınız?", "Ajan bulma oranını %90 civarı yazdı. Raporu başka bir yapay zekâya (Claude) kontrol ettirdim; ölçüm betiğinin kodu hiç çalıştırmadığı, sonucun elle yazıldığı görüldü. Kod çalıştırılınca %50'ler civarı çıktı; ajana düzeltme listesi verildi."],
+  ["Hafta 8", "PyMuPDF sürümünü neden sabitlediniz?", "1.27 ve 1.28 aynı PDF'i farklı bloklara böldü; sonuçlar sürüme göre değişiyordu. Sürüm 1.28.2'ye sabitlendi; farklı sürümle çalışılırsa program hata verip duruyor."],
+  ["Hafta 8", "Arayüzde neler yaptınız?", "DEMO.bat yerine tarayıcıda açılan sade program (INCELE.bat): kitap seçiliyor, kriterler işaretleniyor, sonuçlar ve çıktılar tek ekranda. Dört ayrı yapay zekâ ajanına inceletip ortak bulguları düzelttik."],
+  // Kavram
+  ["Kavram", "İsabet (precision) ile bulma oranı (recall) farkı nedir?", "İsabet: işaretlediklerimizin kaçı gerçekten hata. Bulma oranı: kitaptaki gerçek hataların kaçını bulduk. Biri yükselirken diğeri düşebilir; ikisine birlikte bakmak gerekir."],
+  ["Kavram", "Test setini neden kilitliyorsunuz?", "Ayar yaparken hep aynı örneklere bakarsak sonuç olduğundan iyi çıkar. Ayarı yalnız geliştirme setiyle yapıp kilitli test setini en sonda bir kez çalıştırınca gerçekçi sonuç alırız."],
+  ["Kavram", "Ön kayıt ne demek?", "Başarı ölçütünü denemeden önce yazıp kaydetmek; sonuç kötü çıkınca ölçütü değiştirmemek. Müfredatta ve yazım modelinde böyle yaptık; ikisi de ölçütü geçemeyince ürüne girmedi."],
+  ["Kavram", "Fleiss kappa nedir?", "Birden çok değerlendiricinin, şans eseri uyuşmanın ötesinde ne kadar uyuştuğunu gösterir. 0 şans düzeyi, 1 tam uyum. Kurulumuz 0,33 çıktı: zayıf-orta uyum."],
+  ["Kavram", "Embedding nedir, projede nerede kullandınız?", "Cümleyi anlamını temsil eden sayılara çevirmek. Sayıları birbirine yakın cümleler anlamca benzer. bge-m3 ile çelişki adayı cümle çiftlerini ve müfredatta çıktıya en benzer paragrafları bulduk."],
+  ["Kavram", "Morfolojik analiz nedir?", "Kelimeyi kök ve eklerine ayırmak. Starlang ve Zemberek bir kelimeyi Türkçe kök ve eklere ayıramıyorsa kelime yanlış yazılmış olabilir."],
+  ["Kavram", "Metin katmanı ile basılı sayfa neden farklı olabilir?", "PDF'te ekranda görünen harf (glyph) ile içine kaydedilen metin farklı olabilir; bazı fontlar \"İ\"yi metinde \"I\" olarak kaydediyor. Bu yüzden her hatayı basılı sayfadan doğrulamak gerekir."],
+  ["Kavram", "F1 skoru nedir? Yazım modelinin 0,91'i ne demek?", "İsabet ile bulma oranını tek sayıda birleştiren ölçü (harmonik ortalama). Model kitaba eklenen yapay hatalarda 0,91 aldı, yani yapay hatalarda çok iyiydi; ama gerçek kitapta işe yaramadı."],
+  ["Kavram", "Körlemesine etiketleme neden önemli?", "Etiketleyen sistemin kararını görürse farkında olmadan ona uyar. Modelin 60 tespiti olasılıklar görülmeden, kurul da adayların nereden geldiğini bilmeden değerlendirdi."],
+  ["Kavram", "VRAM nedir, projede neden önemliydi?", "Ekran kartının belleği; dil modelleri orada çalışıyor. Dolunca bilgisayar çöktü. Bu yüzden 1 GB boş bırakılıyor ve aynı anda tek model çalışıyor."],
+  ["Hatalar", "Başlangıçta PDF okumada ne sorun çıktı?", "Gerçek kitapta sayfa başına ~71 blok çıktı; haritada her il adı ayrı blok, bazı fontlarda Türkçe harfler okunamıyor, sıra okuma sırası değil. Bloklar türe ayrıldı (paragraf, kısa, bozuk, simge) ve yukarıdan aşağıya, soldan sağa sıralandı."],
+  ["Hatalar", "Cümle bölme hatası neydi?", "Kitapta noktadan sonra boşluk yoktu, kural boşluk arıyordu; 4 cümle 3 sayıldı. Kural düzeltildi; testi yazarken \"T.B.M.M.\" kısaltmasındaki ikinci hata da bulundu."],
+  ["Hatalar", "Raporlarda hangi gerçek hata mesajları var?", "MemoryError (bellek doldu), Load failed 0xc0000409 (iki model aynı anda ekran kartında), AssertionError (ACTH/ADH tanımları replik sanıldı), UnboundLocalError (demo isim çakışması), SyntaxError (f-string içinde ters bölü)."],
+  ["Hatalar", "f-string hatası neydi?", "Sayfa görüntüsü alan betikte f-string'in süslü parantezi içinde re.sub ile ters bölü kullanılmıştı; Python'un bu sürümü buna izin vermiyor. İfade önce ayrı bir değişkende hesaplandı."],
+  ["Hatalar", "Test setinde hangi hata çıktı?", "Bir madde setin kuralına aykırıydı (karakter konuşmasından alınmıştı) ve puanlama \"Hz.\" kısaltması yüzünden bulunan bir çelişkiyi bulunamadı saydı. Puanlama düzeltildi, kilitli test seti değiştirilmedi, hatalı madde raporda yazıldı."],
+  ["Araçlar", "PyMuPDF'i ne için kullandınız?", "PDF'ten metni konumuyla çıkarmak, basılı sayfa numarasını ve kalın/italik bilgisini okumak, kitabın PDF'ine not eklemek ve sayfa görüntüsü almak."],
+  ["Araçlar", "openpyxl ve NumPy ne işe yaradı?", "openpyxl Excel raporunu oluşturup editörün doldurduğu dosyayı geri okuyor. NumPy embedding vektörleri arasındaki benzerliği hesaplıyor."],
+  ["Araçlar", "PyTorch, transformers ve BERTurk'ün ilişkisi ne?", "BERTurk hazır Türkçe model; transformers onu indirip kullanmayı sağlayan kütüphane; PyTorch modeli ekran kartında (CUDA) eğiten kütüphane. Üçüyle yazım modeli eğitildi."],
+  ["Araçlar", "Vikipedi'den nasıl veri topladınız?", "Vikipedi maddelerinin değişiklik geçmişinde birinin yazım hatasını düzelttiği değişiklikleri bulup ~28 bin gerçek \"hata → düzeltme\" cümlesi çıkardık; yazım modelinin eğitim verisine kattık."],
+  ["Süreç", "Hangi yazılım geliştirme modelini izlediniz, neden?", "Yinelemeli ve artımlı bir model: projeyi üç faza böldük, her hafta çalışan bir parça ekleyip ölçtük, sonuca göre sonraki adımı değiştirdik. Araştırma ağırlıklı bir projeydi; hangi aracın işe yarayacağını başta bilmiyorduk. Okunabilirlik, müfredat ve yazım modeli sonuçları yönümüzü değiştirdi; şelalede bunlar çok geç fark edilirdi."],
+  ["Süreç", "SDLC ile STLC farkı nedir?", "SDLC yazılımın baştan sona geliştirilme sürecidir (gereksinim, tasarım, geliştirme, test, teslim). STLC bunun içindeki test sürecidir: gereksinim analizi, test planlama, test vakası geliştirme, test ortamı, test yürütme, test kapanışı."],
+  ["Süreç", "Gereksinim analizi, planlama, tasarım, kodlama, test, dağıtım aşamalarında ne yaptınız?", "Bu sıralama SDLC'dir. Gereksinim: editörün hatanın yerini görmesi, gerçek hatanın kaybolmaması, kitabın dışarı gitmemesi. Planlama: üç faz, haftalık hedefler, karar dosyası, ön kayıt. Tasarım: PDF okuma → ayrı kriter modülleri → tek tespit listesi → inceleme sayfası, notlu PDF, Excel. Kodlama: Python, küçük commit'ler, testlerle birlikte. Test: STLC döngüsü (birim, uçtan uca, gerileme, kurul). Dağıtım: DEMO.bat ve INCELE.bat, yerel çalışıyor. Bakım: 6. haftadaki demo çökmesinin düzeltilmesi gibi."],
+  ["Süreç", "STLC'nin aşamalarında ne yaptınız?", "Gereksinim: doğru yeri gösteriyor mu, gerçek hatayı buluyor mu, işaretledikleri hata mı, gerçek hata kaybolmamalı. Planlama: ölçütleri önceden yazdık (ön kayıt), geliştirme/test ayrımı. Vakalar: birim testleri, bilerek eklenmiş 50 çelişki ve 80 yazım hatası. Ortam: .venv, sabit PyMuPDF, Ollama ayarı, Bekçi. Yürütme: her değişiklikte testler, kilitli seti bir kez, demo uçtan uca, kurul. Kapanış: sonuç belgeleri, olumsuz sonuçlar da raporlandı, ölçülen başarı ürüne yazıldı."],
+  ["Süreç", "Test planlamasında ne yaptınız?", "Başarı ölçütünü denemeden önce yazdık ve değiştirmedik: müfredatta 0,85, yazım modelinde eğitimden önce yazılan ölçüt, bağımsız ölçümde önceden rastgele seçilip kilitlenen sayfalar. Ayarı yalnız geliştirme setiyle yapıp test setini kilitledik."],
+  ["Süreç", "Test ortamını nasıl hazırladınız?", "Projeye özel Python ortamı (.venv) ve PyMuPDF 1.28.2'ye sabitlenmiş sürüm; yanlış sürümde program duruyor. Ollama ekran kartında 1 GB boş bırakıyor, aynı anda tek model çalışıyor; Bekçi pil, sıcaklık ve RAM'e bakıp işi bekletiyor."],
+  ["Süreç", "Hangi test türlerini kullandınız?", "Birim testi (unittest, 267 test), uçtan uca test (demo 7 adım), gerileme testi (56 eklenmiş hatadan en az 55), bağımsız kabul değerlendirmesi (kurul, görülmemiş sayfalar), körlemesine ve kara kutu değerlendirme, arayüz için kullanılabilirlik incelemesi."],
+  ["Süreç", "Bir hatanın yaşam döngüsünü örnekle anlat.", "Demo uçtan uca çalıştırılınca 3. adımda çöktü (bulundu), sebep günlüğe yazıldı (kaydedildi), değişken adı değiştirildi (düzeltildi), aynı hatayı yakalayan test eklendi, bütün testler ve demo yeniden geçti (yeniden test), commit 12b606b ile kapatıldı."],
+  ["Süreç", "V modeline benzeyen bir şey yaptınız mı?", "Evet: her özelliğin başarı ölçütünü geliştirmeden önce yazdık (ön kayıt). Test planı geliştirmeyle aynı anda hazırlanıyordu; geliştirme bitince önceden yazılan ölçütle test edildi."],
+  ["Model seçimi", "Neden Python?", "PDF çıkarma, dil modeli bağlantısı ve değerlendirme için en güçlü kütüphaneler Python'da. Java Zemberek'i doğrudan çalıştırırdı ama PDF ve dil modeli için çok daha fazla kod gerekirdi; JavaScript'te Türkçe NLP aracı neredeyse yok."],
+  ["Model seçimi", "Neden PyMuPDF?", "Metni bloklar ve konumlarıyla doğrudan veriyor; PDF'e not ekleme ve basılı sayfa numarası da aynı kütüphanede. pdfplumber paragraf gruplamıyor ve yavaş, pypdf güvenilir konum vermiyor. İki kütüphane kullansaydık aynı metni farklı çıkarabilirlerdi."],
+  ["Model seçimi", "Yazımda neden Starlang ve Zemberek, neden Hunspell değil?", "Denemede Hunspell 80 sahte hata verdi; şapkalı yazımları (millî, hâline) ve kesmeli özel adları hata saydı. Zemberek \"nesile\"yi geçerli saydı; Starlang 40 bozuk kelimenin 40'ını buldu ama güven ayrımı yoktu. İkisini birlikte kullanınca gerçek hata kaçmıyor, hemfikirlerse güven 1 oluyor."],
+  ["Model seçimi", "Çelişki için neden gemma4?", "Altı modeli 31 cümle çiftiyle yarıştırdık. Doğrulukta gemma4 0,94 ile birinci oldu (Turkish-Gemma 0,84, qwen3.5 0,90, gemma2 0,83, qwen3:4b 0,82, aya-expanse 0,68). Açıklamaları da daha kısa ve netti; her tespitin açıklaması proje şartıydı."],
+  ["Model seçimi", "Neden bulut değil yerel model?", "Bulut daha isabetli olabilir ama ücretli ve her denemede yeniden ödeniyor. Yerel model ücretsiz ve sınırsız deneme sağlıyor, internetsiz çalışıyor, hocanın yanında aynı sonucu veriyor ve kitap dışarı gitmiyor."],
+  ["Model seçimi", "Neden bge-m3?", "Çok dilli bir embedding modeli ve Ollama üzerinden çalışıyor, projeye ağır bağımlılık eklemiyor. Alternatif nomic-embed-text ağırlıklı İngilizce, Türkçe e5 modelleri ise PyTorch kurulumu gerektiriyordu."],
+  ["Model seçimi", "Çelişkide neden bütün cümle çiftlerine bakmadınız?", "Sosyal Bilgiler 6'da ~1,9 milyon çift ederdi, imkânsız. İddia çıkarma da kitap başına 2–6 saat sürerdi. Benzer cümleleri embedding ile seçip yalnız birkaç yüz–birkaç bin aday çifti modele soruyoruz."],
+  ["Model seçimi", "Güven için neden aynı modeli iki kez sormadınız?", "Aynı model genelde kendisiyle hemfikir olur; gerçek bir ikinci görüş değil. Bu yüzden ikinci görüş farklı bir model (Turkish-Gemma) ve yazımda farklı bir araç (Zemberek)."],
+  ["Kodlar", "Hafta 4 raporundaki güven kodunu açıkla (oylar = ...).", "Her cümle çifti için iki modelin kararı listeye konuyor: gemma4 (hakem) ve Turkish-Gemma (ikinci görüş). gemma4 çelişki demediyse çift atlanıyor (continue). İkisi de çelişki derse güven 1,0, yalnız gemma4 derse 0,5."],
+  ["Kodlar", "_yazim_notu fonksiyonu ne yapıyor?", "Bir yazım tespitini notlu PDF'e çiziyor: kelimenin sayfadaki kutusunu buluyor, not metnini (açıklama, sayfa, güven, uyarı) hazırlıyor, kelimenin altına dalgalı çizgi çekiyor. Kelime bulunamazsa bütün bloğu kesikli çerçeveyle işaretliyor; böylece tespit kaybolmuyor. Düşük öncelikliler farklı renkte."],
+  ["Kodlar", "Hafta 5 raporundaki satır birleştirme kodunu açıkla.", "Üstteki parça (a) ile alttaki (b) şu şartların hepsi tutarsa birleşiyor: a tek satır, aradaki boşluk satır yüksekliğinin 0,6'sından az, sol kenarlar hizalı, a sütunu dolduruyor, cümle yarım kalmış (b küçük harfle başlıyor ya da a virgül/küçük harfle bitiyor) ve b madde işaretiyle başlamıyor."],
+  ["Kodlar", "bbox nedir?", "Bir metin parçasının sayfadaki kutusu: [sol, üst, sağ, alt] koordinatları. bbox[3] - bbox[1] satırın yüksekliğini, b.bbox[1] - a.bbox[3] iki satır arasındaki boşluğu verir."],
+  ["Kodlar", "Satır birleştirmede 'tek satır' şartı neden sonradan eklendi?", "İki satırlık kalın bir başlık alttaki metne yapışıyordu ve yanlış bir çelişki çıkarmıştı. Üstteki parça çok yüksekse (birden çok satırsa) artık birleştirilmiyor."],
+  ["Kodlar", "Hafta 6'daki test kodu neyi kontrol ediyor?", "Demo dosyasında içe aktarılan modüllerin adlarını topluyor ve main fonksiyonundaki yerel değişken adlarıyla kesişip kesişmediğine bakıyor. Kesişim varsa test başarısız: bir değişken bir modülün adını gölgeliyor demektir (UnboundLocalError'ın sebebi)."],
+  ["Kodlar", "cogunluk fonksiyonu ne yapıyor?", "Bağımsız kurulda her aday için ChatGPT, Gemini ve DeepSeek'in oylarını Counter ile sayıyor. En az iki 'hata' → gerçek hata; en az iki 'hata değil' → yanlış alarm; yoksa belirsiz."],
+  ["Kodlar", "PyMuPDF sürüm koruması neden var?", "PyMuPDF 1.27 ve 1.28 aynı PDF'i farklı bloklara bölüyor. Ölçüm 1.28.2 ile yapıldığı için program başka sürümle açılırsa RuntimeError verip duruyor ve doğru Python'u (proje .venv'i) söylüyor. Yoksa ölçülen başarı geçerli olmazdı."],
+  ["Kavram", "Aşırı uyum (overfitting) nedir? Projede örneği var mı?", "Görülmüş veriye göre yapılan iyileştirmenin yeni veride işe yaramaması. Yazım modeli yapay hatalarda 0,91 alıp gerçek kitapta 60'ta 1 buldu; sonradan yazılan kurallar da yeni kitaplarda neredeyse hiç çalışmadı."],
+  // Yapay zekâ
+  ["Yapay zekâ", "Kodu kim yazdı?", "Kodun tamamına yakınını yapay zekâ (Claude) yazdı; raporlarda da açıkça yazdım. Ben yönü belirledim, kararları tartışarak verdim, verileri indirdim, sonuçları ve ajan raporlarını kontrol ettirdim."],
+  ["Yapay zekâ", "Yapay zekânın bir hatasını yakaladın mı?", "Evet: Hafta 4'te test setinde kuralına aykırı bir madde ve \"Hz.\" yüzünden yanlış puanlama; Hafta 6'da demo kodundaki isim çakışması; Hafta 8'de ajanın şişirilmiş oranı (ölçüm betiği kodu çalıştırmıyordu)."],
+  ["Yapay zekâ", "Yapay zekânın çıktılarını nasıl doğruladın?", "Kodu çalıştırarak ve testlerle; ajan raporlarını ikinci bir yapay zekâya kontrol ettirerek; şüpheli tespitlerde basılı sayfa görüntüsüne bakarak; sistemi yazmayan üç yapay zekâdan oluşan kurulla bağımsız ölçerek."],
+  ["Yapay zekâ", "Yapay zekâ olmasaydı ne olurdu?", "Bu seviyede kod yazamadığım için proje bu noktaya gelemezdi. Araştırma ve kitapları indirme gibi işleri kendim yapabilirdim."],
+  ["Yapay zekâ", "Neden kurulda üç farklı firmanın modeli var?", "Tek bir modelin yanılgısına bağlı kalmamak ve sistemi yazan yapay zekâdan bağımsız olmak için. Çoğunluk oyuyla karar veriyoruz ve aralarındaki uyumu kappa ile ölçüyoruz."]
+];
+
+const KATEGORILER = ["Hepsi", "Genel", "Süreç", "Model seçimi", "Kodlar", "Hafta 4", "Hafta 5", "Hafta 6", "Hafta 8", "Hatalar", "Kavram", "Araçlar", "Yapay zekâ"];
+const ANAHTAR = "vize-defteri-bilinen";
+let bilinen = new Set();
+try { bilinen = new Set(JSON.parse(localStorage.getItem(ANAHTAR) || "[]")); } catch (e) { bilinen = new Set(); }
+function kaydet() { try { localStorage.setItem(ANAHTAR, JSON.stringify([...bilinen])); } catch (e) {} }
+
+const durum = { kat: "Hepsi", ara: "", sadeceBilinmeyen: false, acik: new Set() };
+const liste = document.getElementById("liste");
+const filtreler = document.getElementById("filtreler");
+
+KATEGORILER.forEach(k => {
+  const b = document.createElement("button");
+  b.className = "cip"; b.type = "button"; b.textContent = k;
+  b.setAttribute("aria-pressed", String(k === durum.kat));
+  b.addEventListener("click", () => { durum.kat = k; [...filtreler.children].forEach(c => c.setAttribute("aria-pressed", String(c.textContent === k))); ciz(); });
+  filtreler.appendChild(b);
+});
+
+function normal(s) { return s.toLocaleLowerCase("tr"); }
+function suzulmus() {
+  const a = normal(durum.ara.trim());
+  return SORULAR.map((s, i) => ({ i, kat: s[0], q: s[1], c: s[2] })).filter(s =>
+    (durum.kat === "Hepsi" || s.kat === durum.kat) &&
+    (!durum.sadeceBilinmeyen || !bilinen.has(s.i)) &&
+    (!a || normal(s.q + " " + s.c).includes(a)));
+}
+
+function ilerleme() {
+  const toplam = SORULAR.length, n = bilinen.size;
+  document.getElementById("ilerleme-metin").textContent = n + " / " + toplam + " biliniyor";
+  document.getElementById("ilerleme-cubuk").style.width = (100 * n / toplam) + "%";
+}
+
+function ciz() {
+  const ss = suzulmus();
+  liste.replaceChildren();
+  if (!ss.length) { const d = document.createElement("div"); d.className = "bos"; d.textContent = "Bu süzgeçle soru kalmadı. Başka bir konu seç ya da aramayı temizle."; liste.appendChild(d); }
+  ss.forEach(s => {
+    const kap = document.createElement("div");
+    kap.className = "soru" + (bilinen.has(s.i) ? " bilinen" : "");
+    const acik = durum.acik.has(s.i);
+    if (acik) kap.setAttribute("open-q", "");
+    const bas = document.createElement("button");
+    bas.className = "soru-bas"; bas.type = "button"; bas.id = "soru-" + s.i;
+    bas.setAttribute("aria-expanded", String(acik));
+    bas.innerHTML = '<span class="kat"></span><span class="q"></span><span class="ok" aria-hidden="true">›</span>';
+    bas.querySelector(".kat").textContent = s.kat + (bilinen.has(s.i) ? " · ✓" : "");
+    bas.querySelector(".q").textContent = s.q;
+    bas.addEventListener("click", () => { acik ? durum.acik.delete(s.i) : durum.acik.add(s.i); ciz(); document.getElementById("soru-" + s.i)?.focus(); });
+    kap.appendChild(bas);
+    if (acik) {
+      const c = document.createElement("div"); c.className = "cevap";
+      const p = document.createElement("p"); p.textContent = s.c; c.appendChild(p);
+      const dd = document.createElement("div"); dd.className = "alt-dugmeler";
+      const bil = document.createElement("button"); bil.type = "button"; bil.className = "dugme ikincil";
+      bil.textContent = bilinen.has(s.i) ? "Bilmiyorum olarak işaretle" : "Biliyorum";
+      bil.addEventListener("click", () => { bilinen.has(s.i) ? bilinen.delete(s.i) : bilinen.add(s.i); kaydet(); ilerleme(); ciz(); });
+      dd.appendChild(bil); c.appendChild(dd); kap.appendChild(c);
+    }
+    liste.appendChild(kap);
+  });
+  ilerleme();
+}
+
+document.getElementById("ara").addEventListener("input", e => { durum.ara = e.target.value; ciz(); });
+const sb = document.getElementById("sadece-bilinmeyen");
+sb.addEventListener("click", () => { durum.sadeceBilinmeyen = !durum.sadeceBilinmeyen; sb.setAttribute("aria-pressed", String(durum.sadeceBilinmeyen)); ciz(); });
+
+// rastgele soru modu
+const kart = document.getElementById("kart");
+let kartSoru = null;
+function yeniKart() {
+  let havuz = suzulmus().filter(s => !bilinen.has(s.i));
+  if (!havuz.length) havuz = suzulmus();
+  if (!havuz.length) { kart.hidden = true; return; }
+  let s; do { s = havuz[Math.floor(Math.random() * havuz.length)]; } while (havuz.length > 1 && kartSoru && s.i === kartSoru.i);
+  kartSoru = s;
+  document.getElementById("kart-kat").textContent = s.kat;
+  document.getElementById("kart-soru").textContent = s.q;
+  const cv = document.getElementById("kart-cevap"); cv.textContent = s.c; cv.hidden = true;
+  document.getElementById("kart-goster").hidden = false;
+  kart.hidden = false;
+}
+document.getElementById("rastgele").addEventListener("click", () => { yeniKart(); kart.scrollIntoView({ block: "nearest" }); });
+document.getElementById("kart-goster").addEventListener("click", e => { document.getElementById("kart-cevap").hidden = false; e.target.hidden = true; });
+document.getElementById("kart-sonraki").addEventListener("click", yeniKart);
+document.getElementById("kart-bil").addEventListener("click", () => { if (kartSoru) { bilinen.add(kartSoru.i); kaydet(); ciz(); } yeniKart(); });
+document.getElementById("kart-kapat").addEventListener("click", () => { kart.hidden = true; });
+
+// hafta sekmeleri
+const sekmeler = [...document.querySelectorAll(".sekme")];
+function sekmeAc(sekme) {
+  sekmeler.forEach(s => { const sec = s === sekme; s.setAttribute("aria-selected", String(sec)); s.tabIndex = sec ? 0 : -1; document.getElementById(s.getAttribute("aria-controls")).hidden = !sec; });
+  try { localStorage.setItem("vize-defteri-sekme", sekme.id); } catch (e) {}
+}
+sekmeler.forEach((s, i) => {
+  s.addEventListener("click", () => sekmeAc(s));
+  s.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = sekmeler[(i + (e.key === "ArrowRight" ? 1 : sekmeler.length - 1)) % sekmeler.length]; sekmeAc(n); n.focus(); }
+  });
+});
+try { const k = localStorage.getItem("vize-defteri-sekme"); const s = k && document.getElementById(k); if (s) sekmeAc(s); else sekmeAc(document.getElementById("t-4")); } catch (e) { sekmeAc(document.getElementById("t-4")); }
+
+ciz();
+</script>
+
+</body>
+</html>
