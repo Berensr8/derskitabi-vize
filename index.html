@@ -218,11 +218,12 @@ html { scroll-behavior: smooth; }
 pre.sozde { border-left: 4px solid var(--mavi); background: var(--mavi-yumusak); }
 pre.kendin { border-left: 4px solid var(--iyi); background: var(--iyi-yumusak); }
 .ezber { background: var(--fosfor); color: var(--fosfor-metin); border-radius: 8px; padding: 8px 12px; font-weight: 700; justify-self: start; max-width: 100%; }
-.kod-kart details summary { cursor: pointer; font-weight: 700; color: var(--mavi); }
-.kod-kart details[open] summary { margin-bottom: 8px; }
+.kod-kart .kaynak { font-size: 0.85rem; color: var(--soluk); border-left: 3px solid var(--cizgi); padding-left: 8px; }
 pre.sozde, pre.kendin { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 760px) { pre.kodblok { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.78rem; } }
 code, .kod, pre { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.kod-kart details summary { cursor: pointer; font-weight: 700; color: var(--mavi); }
+.kod-kart details[open] summary { margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -724,11 +725,12 @@ SyntaxError: f-string expression part cannot include a backslash</pre>
 
 <section class="cerceve" id="kodlar" aria-labelledby="kod-b">
   <div class="ic">
-    <div class="bolum-bas"><h2 id="kod-b">Kodlar: gerçek kod ve sözde kod yan yana</h2>
-      <p>Her kodda üç şey var: <b>gerçek kod</b> (raporda olan), <b>sözde kod</b> (Türkçe adımlar; hoca "ne yapıyor?" derse bunu anlat) ve <b>en kısa hâli</b> (hoca "yaz" derse tahtaya bunu yazabilirsin). Sarı kutudaki cümleyi ezberle.</p>
+    <div class="bolum-bas"><h2 id="kod-b">Kodlar: rapordaki kod ve sözde kod yan yana</h2>
+      <p><b>Dört rapordaki bütün kodlar burada (9 kod), raporda yazdığı gibi.</b> Yalnız Word&#39;e yapışırken kaybolan girintiler düzeltildi. Her kartın üstünde raporun hangi bölümünden geldiği yazıyor. En sondaki ek kod raporlarda yok; üstünde açıkça belirtildi. MemoryError, Load failed ve AssertionError kod değil, hata mesajı; onlar Hatalar bölümünde.</p>
+      <p>Her kodda üç şey var: <b>rapordaki kod</b>, <b>sözde kod</b> (Türkçe adımlar; hoca "ne yapıyor?" derse bunu anlat) ve <b>en kısa hâli</b> (hoca "yaz" derse tahtaya bunu yazabilirsin). Sarı kutudaki cümleyi ezberle.</p>
       <p>Sözde kod kuralları: <code>←</code> "değer ata" demek, <code>EĞER … İSE</code> bir koşul, <code>HER … İÇİN</code> bir döngü, <code>DÖNDÜR</code> sonucu geri ver.</p></div>
     <div class="kodlar">
-<article class="kod-kart"><div class="ust-satir"><h3>Ana hakem + yardımcı hakem: çelişkide güven</h3><span class="hf">Hafta 4</span></div><p>Bir cümle çifti çelişkili mi? İki model oy veriyor, güven skoru oylara göre.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">oylar = [iz[alan]["karar"] == "celiski" for alan in ("hakem", "ikinci_gorus")]
+<article class="kod-kart"><div class="ust-satir"><h3>Ana hakem + yardımcı hakem: çelişkide güven</h3><span class="hf">Hafta 4</span></div><p class="kaynak">Hafta 4 raporu · 6. Kod ve proje kanıtları (önemli kod bölümü)</p><p>Bir cümle çifti çelişkili mi? İki model oy veriyor, güven skoru oylara göre.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">oylar = [iz[alan]["karar"] == "celiski" for alan in ("hakem", "ikinci_gorus")]
 if not oylar[0]:
     continue
 iz["guven"] = 1.0 if all(oylar) else 0.5</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER cümle çifti İÇİN:
@@ -744,26 +746,53 @@ iz["guven"] = 1.0 if all(oylar) else 0.5</pre></div><div><span class="etk">Sözd
         guven = 1.0
     else:
         guven = 0.5</pre></details><p class="ezber">gemma4 demezse yok; ikisi derse 1, yalnız gemma4 derse yarım.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Kırmızı kalem: yazım hatasını PDF'e çizmek</h3><span class="hf">Hafta 4</span></div><p>Bulunan yazım hatasını kitabın PDF'ine not olarak işler.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">kutular = _kutular(...)          # kelimenin sayfadaki kutuları
-icerik = f"{t.aciklama} ... Güven: ..."
-if kutular:
-    annot = sayfa.add_squiggly_annot(kutular)
-else:  # kelime bulunamadı: bütün blok
-    kutular = [pymupdf.Rect(t.bbox) + (-2, -2, 2, 2)]
-    annot = sayfa.add_rect_annot(kutular[0])
-    annot.set_border(width=0.8, dashes=[2, 2])
-_not(annot, "yazim", f"Yazım ({tur})", icerik, renk)</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">FONKSİYON yazım_notu_çiz(tespit):
+<article class="kod-kart"><div class="ust-satir"><h3>Bekçi: bilgisayarı koruyan kontrol</h3><span class="hf">Hafta 4</span></div><p class="kaynak">Hafta 4 raporu · 9.5 Yapay zekâ tarafından üretilen kodlar</p><p>Bilgisayar çöktükten sonra eklendi. Uzun model çalışmalarında pile geçilirse ya da ekran kartı çok ısınırsa işi bekletir.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">if self.prizde() is False:
+    self.yaz("Bilgisayar pilde: ağır iş duraklatıldı, şarja takınca devam edecek.")
+    while self.prizde() is False:
+        self.uyku(BEKLEME_SN)
+t = self.sicaklik()
+if t is not None and t &gt;= SICAKLIK_UST:
+    while (t := self.sicaklik()) is not None and t &gt; SICAKLIK_DEVAM:
+        self.uyku(BEKLEME_SN)</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">EĞER bilgisayar prizde değilse İSE:
+    "pildesin, iş duraklatıldı" yaz
+    prize takılana KADAR bekle
+t ← ekran kartının sıcaklığı
+EĞER t üst sınırı geçtiyse İSE:
+    sıcaklık devam sınırının altına inene KADAR bekle
+
+(her 20 istekte bir bakılıyor; RAM azalırsa da bekliyor,
+ her 150 istekte bir mola veriyor)</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">while not prizde():
+    time.sleep(30)
+while sicaklik() &gt; 80:
+    time.sleep(30)</pre></details><p class="ezber">Pildeysen şarjı bekle, sıcaksan soğumayı bekle.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Kırmızı kalem: yazım hatasını PDF'e çizmek</h3><span class="hf">Hafta 4</span></div><p class="kaynak">Hafta 4 raporu · 9.12 Yapay zekâ kullanım kanıtları (yapay zekânın ürettiği ilk kod)</p><p>Bulunan yazım hatasını kitabın PDF'ine not olarak işler.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">def _yazim_notu(s: _Sayfalar, t: Tespit, dusuk: bool) -&gt; tuple[float, float]:
+    sayfa = s.sayfa(t.sayfa_no)
+    kutular = _kutular(parca_kutulari(_ham_kelimeler(s.kelimeler(t.sayfa_no), t.bbox), t.metin_parcasi or ""))
+    tur = "kelime" if t.alt_tur == "morfoloji" else f"TDK kuralı: {KURAL_ADLARI.get(t.alt_tur, t.alt_tur)}"
+    icerik = (f"{t.aciklama}\n\nKonum: {konum_metni(t.sayfa_no, t.basili_sayfa_no)}\n"
+              f"Güven: {guven_metni(t.guven_skoru)}\n\n{UYARI}")
+    renk = RENKLER["dusuk"] if dusuk else None
+    if kutular:
+        annot = sayfa.add_squiggly_annot(kutular)
+    else:  # kelime sayfada bulunamadı (PDF okuma farkı): bütün blok işaretlenir
+        kutular = [pymupdf.Rect(t.bbox) + (-2, -2, 2, 2)]
+        annot = sayfa.add_rect_annot(kutular[0])
+        annot.set_border(width=0.8, dashes=[2, 2])
+    _not(annot, "yazim", f"Yazım ({tur})", icerik, renk)
+    return kutular[0].x0, kutular[0].y0</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">FONKSİYON yazım_notu_çiz(tespit):
     kutular ← hatalı kelimenin sayfadaki yeri
+    tür ← "kelime" ya da "TDK kuralı: ..."
     not ← açıklama + sayfa + güven + uyarı
     EĞER kelime bulundu İSE:
         altına dalgalı çizgi çiz
     DEĞİLSE:
         bütün bloğa kesikli çerçeve çiz
-    notu ekle (düşük öncelikliyse farklı renk)</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if kutular:
+    notu ekle (düşük öncelikliyse farklı renk)
+    DÖNDÜR notun konumu</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if kutular:
     sayfa.add_squiggly_annot(kutular)
 else:
     sayfa.add_rect_annot(blok_kutusu)</pre></details><p class="ezber">Bul, yaz, çiz. Bulamazsan çerçevele; tespit kaybolmasın.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Yarım cümle dedektifi: iki satır birleşsin mi?</h3><span class="hf">Hafta 5</span></div><p>PDF her satırı ayrı okuyunca, üstteki satırın alttakiyle aynı paragraf olup olmadığına karar verir.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">satir = a.bbox[3] - a.bbox[1]
+<article class="kod-kart"><div class="ust-satir"><h3>Yarım cümle dedektifi: iki satır birleşsin mi?</h3><span class="hf">Hafta 5</span></div><p class="kaynak">Hafta 5 raporu · 6. Kod ve proje kanıtları (önemli kod bölümü)</p><p>PDF her satırı ayrı okuyunca, üstteki satırın alttakiyle aynı paragraf olup olmadığına karar verir.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">satir = a.bbox[3] - a.bbox[1]
 if satir &gt; _SATIR_YUKSEKLIGI_EN_FAZLA:
     return False
 bosluk = b.bbox[1] - a.bbox[3]
@@ -785,70 +814,71 @@ return -2 &lt;= bosluk &lt;= 0.6 * satir and hizali and dolu and yarim and not _
     yakin = bosluk &lt; 0.6 * satir
     yarim = alt.metin[0].islower()
     return yakin and yarim</pre></details><p class="ezber">Beş soru: Yakın mı? Hizalı mı? Dolu mu? Yarım mı? Madde değil mi? Hepsi evetse birleştir.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Gölge isim: demoyu çökerten hata</h3><span class="hf">Hafta 6</span></div><p>Hatanın nasıl oluştuğunun küçük bir örneği. Python, fonksiyonun herhangi bir yerinde bir ada değer atanıyorsa o adı baştan sona yerel değişken sayar.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">from .kriterler import dusuk_oncelik, ...   # modül
+<article class="kod-kart"><div class="ust-satir"><h3>Gölge isim: demoyu çökerten hata ve düzeltmesi</h3><span class="hf">Hafta 6</span></div><p class="kaynak">Hafta 6 raporu · 5. Problem 1 (hata mesajı) ve 9.5 Yapay zekâ tarafından üretilen kodlar (düzeltme)</p><p>Python, bir fonksiyonun herhangi bir yerinde bir ada değer atanıyorsa o adı fonksiyonun tamamında yerel değişken sayar. Sayaç modülle aynı adı taşıyınca yukarıdaki satır modülü değil, henüz değeri olmayan değişkeni gördü.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok"># hata mesajı (Problem 1)
+UnboundLocalError: cannot access local variable 'dusuk_oncelik' where it is not associated with a value
 
-def main() -&gt; None:
-    ...
-    # satır 244: HATA burada
-    yazim_tespitleri = dusuk_oncelik.isaretle(pdf, bloklar, yazim_tespitleri)
-    ...
-    # düzeltmeden önce: aynı ad sayaç yapılmıştı
-    dusuk_oncelik = sum(t_.guven_skoru &lt; 0.5 for t_ in yazim_tespitleri)
-    # düzeltme (12b606b):
-    dusuk_sayisi = sum(t_.guven_skoru &lt; 0.5 for t_ in yazim_tespitleri)</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">modül adı: dusuk_oncelik
+# düzeltilmiş kod (9.5)
+dusuk_sayisi = sum(t_.guven_skoru &lt; 0.5 for t_ in yazim_tespitleri)
+print(f"  {len(yazim_tespitleri)} yazım tespiti (yüksek güven {yuksek}, "
+      f"düşük öncelik {dusuk_sayisi}) ")</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">modül adı: dusuk_oncelik
 FONKSİYON main:
-    dusuk_oncelik'i modül gibi kullan   ← Python: "bu yerel değişken,
-                                          henüz değeri yok!"
+    dusuk_oncelik'i modül gibi kullan    ← burada çöktü
     ...
-    dusuk_oncelik ← bir sayı             ← sebep bu satır
+    dusuk_oncelik ← düşük öncelikli sayısı  ← sebep bu satır
 
-ÇÖZÜM: değişkenin adını dusuk_sayisi yap</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">import math
+ÇÖZÜM: sayacın adını dusuk_sayisi yap
+    dusuk_sayisi ← güveni 0,5'ten küçük tespit sayısı
+    ekrana yaz</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">import math
 
 def hesapla():
     print(math.pi)   # UnboundLocalError
     math = 5         # modülün adını değişkene verdik</pre></details><p class="ezber">Modülün adını değişkene verme; gölge düşer.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Gölge isim avcısı: eklenen test</h3><span class="hf">Hafta 6</span></div><p>Aynı hata bir daha olmasın diye: demodaki modül adları ile main'deki değişken adları çakışıyor mu?</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">moduller = {ad for ad, deger in vars(demo).items()
-            if type(deger).__name__ == "module"}
-self.assertFalse(moduller &amp; set(demo.main.__code__.co_varnames))</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">modül_adları   ← demo dosyasının içe aktardığı modüller
-değişken_adları ← main fonksiyonundaki yerel değişkenler
-ortak ← iki listenin kesişimi
-EĞER ortak boş değilse: TEST BAŞARISIZ</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">ortak = moduller &amp; degiskenler
+<article class="kod-kart"><div class="ust-satir"><h3>Gölge isim avcısı: eklenen test</h3><span class="hf">Hafta 6</span></div><p class="kaynak">Hafta 6 raporu · 6. Kod ve proje kanıtları (önemli kod bölümü)</p><p>Aynı hata bir daha olmasın diye: demodaki modül adları ile main'deki değişken adları çakışıyor mu?</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">def test_main_modul_adlarini_golgelemez(self):
+    moduller = {ad for ad, deger in vars(demo).items()
+               if type(deger).__name__ == "module"}
+    self.assertFalse(moduller &amp; set(demo.main.__code__.co_varnames))</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">TEST main modül adlarını gölgelemesin:
+    modül_adları    ← demo dosyasının içe aktardığı modüller
+    değişken_adları ← main fonksiyonundaki yerel değişkenler
+    ortak ← iki kümenin kesişimi
+    EĞER ortak boş değilse: TEST BAŞARISIZ</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">ortak = moduller &amp; degiskenler
 assert len(ortak) == 0</pre></details><p class="ezber">Modül adları ∩ değişken adları = boş olmalı.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Üç hakem, iki oy: kurulun kararı</h3><span class="hf">Hafta 8</span></div><p>Bağımsız ölçümde ChatGPT, Gemini ve DeepSeek'in oylarından her adayın kararını çıkarır.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">KURUL = ["chatgpt", "gemini", "deepseek"]
+<article class="kod-kart"><div class="ust-satir"><h3>Üç hakem, iki oy: kurulun kararı</h3><span class="hf">Hafta 8</span></div><p class="kaynak">Hafta 8 raporu · 6. Kod ve proje kanıtları; aynı kod 9.5'te de var</p><p>Bağımsız ölçümde ChatGPT, Gemini ve DeepSeek'in oylarından her adayın kararını çıkarır.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">KURUL = ["chatgpt", "gemini", "deepseek"]
 def cogunluk(k):
     c = Counter(oylar[a][k] for a in KURUL)
     if c["HATA"] &gt;= 2: return "HATA"
     if c["DEGIL"] &gt;= 2: return "DEGIL"
-    return "BELIRSIZ"</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER aday İÇİN:
+    return "BELIRSIZ"
+sonuc = {k: cogunluk(k) for k in anahtar}</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER aday İÇİN:
     üç modelin oyunu say
     EĞER "hata" oyu ≥ 2 İSE:        karar ← HATA
     DEĞİLSE EĞER "değil" oyu ≥ 2 İSE: karar ← DEĞİL
-    DEĞİLSE:                          karar ← BELİRSİZ</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">oylar = ["HATA", "DEGIL", "HATA"]
+    DEĞİLSE:                          karar ← BELİRSİZ
+sonuç ← her adayın kararı</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">oylar = ["HATA", "DEGIL", "HATA"]
 if oylar.count("HATA") &gt;= 2:
     karar = "HATA"
 elif oylar.count("DEGIL") &gt;= 2:
     karar = "DEGIL"
 else:
     karar = "BELIRSIZ"</pre></details><p class="ezber">İki "hata" = hata, iki "değil" = değil, yoksa belirsiz.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Kapıdaki görevli: PyMuPDF sürüm koruması</h3><span class="hf">Hafta 8</span></div><p>Program açılırken PyMuPDF sürümüne bakar; ölçülen sürüm değilse içeri almaz.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">_BEKLENEN_PYMUPDF_SURUMU = "1.28.2"
+<article class="kod-kart"><div class="ust-satir"><h3>Kapıdaki görevli: PyMuPDF sürüm koruması</h3><span class="hf">Hafta 8</span></div><p class="kaynak">Hafta 8 raporu · 9.12 Yapay zekâ kullanım kanıtları (yapay zekânın ürettiği ilk kod)</p><p>Program açılırken PyMuPDF sürümüne bakar; ölçülen sürüm değilse içeri almaz.</p><div class="kod-ikili"><div><span class="etk">Rapordaki kod</span><pre class="kodblok">_BEKLENEN_PYMUPDF_SURUMU = "1.28.2"
 if pymupdf.__version__ != _BEKLENEN_PYMUPDF_SURUMU:
     raise RuntimeError(
         f"PyMuPDF sürümü {pymupdf.__version__}; beklenen: {_BEKLENEN_PYMUPDF_SURUMU}. "
-        "Lütfen D:\\derskitabı\\.venv\\Scripts\\python.exe kullanın.")</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">beklenen ← "1.28.2"
+        "Farklı PyMuPDF sürümleri blok bölütlemesini değiştirmektedir. "
+        "Lütfen D:\\derskitabı\\.venv\\Scripts\\python.exe kullanın."
+    )</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">beklenen ← "1.28.2"
 EĞER yüklü sürüm ≠ beklenen İSE:
-    DUR ve "doğru Python'u (.venv) kullan" de</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if pymupdf.__version__ != "1.28.2":
+    DUR ve şunu söyle:
+    "farklı sürüm blokları farklı böler,
+     doğru Python'u (.venv) kullan"</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">if pymupdf.__version__ != "1.28.2":
     raise RuntimeError("Yanlış PyMuPDF sürümü")</pre></details><p class="ezber">Ölçtüğün sürüm değilse çalışma.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Ters bölü yasağı: f-string hatası</h3><span class="hf">Hafta 8</span></div><p>Sayfa görüntüsünü kaydeden satır, Python 3.11'de hiç çalışmadı.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok"># YANLIŞ (SyntaxError)
-p.get_pixmap(clip=r, dpi=300).save(
-    f"{klasor}/k42_{kitap}_{s}_{re.sub(r'\W','_',aranan)}.png")
-
-# DOĞRU
-temiz = re.sub(r'\W', '_', aranan)
-p.get_pixmap(clip=r, dpi=300).save(f"{klasor}/k42_{kitap}_{s}_{temiz}.png")</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">f-string'in { } içine \ içeren ifade YAZMA
+<article class="kod-kart"><div class="ust-satir"><h3>Ters bölü yasağı: f-string hatası</h3><span class="hf">Hafta 8</span></div><p class="kaynak">Hafta 8 raporu · 9.12 (hata mesajları). Düzeltme raporda yazıyla anlatılıyor; düzeltilmiş satır raporda yok, burada örnek olarak yazıldı.</p><p>Kaçan hataların sayfa görüntüsünü kaydeden betik, Python 3.11'de hiç çalışmadı.</p><div class="kod-ikili"><div><span class="etk">Rapordaki hata mesajı</span><pre class="kodblok">File "bosluk_bak.py", line 20
+  p.get_pixmap(clip=r, dpi=300).save(f"{sys.argv[1]}/k42_{kitap}_{s}_{re.sub(r'\W','_',aranan)}.png")
+SyntaxError: f-string expression part cannot include a backslash</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">f-string'in { } içine \ içeren ifade YAZMA
 önce: temiz ← kelimedeki harf dışı işaretleri "_" yap
-sonra: dosya_adı ← "k42_" + kitap + sayfa + temiz + ".png"</pre></div></div><details><summary>Kendin yazarsan (en kısa hâli)</summary><pre class="kodblok kendin">temiz = aranan.replace(" ", "_")
-dosya = f"{temiz}.png"</pre></details><p class="ezber">Önce hesapla, sonra f-string'e koy.</p></article>
-<article class="kod-kart"><div class="ust-satir"><h3>Bonus: benzer cümleleri bulmak (rapora girmedi)</h3><span class="hf">Tutarlılık</span></div><p>"Çelişkileri nasıl buluyorsunuz?" sorusu için. Bütün cümle çiftlerine bakmak yerine yalnız anlamca en yakın komşular dil modeline gidiyor.</p><div class="kod-ikili"><div><span class="etk">Gerçek kod</span><pre class="kodblok">V = V / np.linalg.norm(V, axis=1, keepdims=True)   # boyu 1 yap
+sonra: dosya_adı ← klasör + "k42_" + kitap + sayfa + temiz + ".png"</pre></div></div><details><summary>Düzeltilmiş hâli (örnek)</summary><pre class="kodblok kendin">temiz = re.sub(r"\W", "_", aranan)
+p.get_pixmap(clip=r, dpi=300).save(f"{sys.argv[1]}/k42_{kitap}_{s}_{temiz}.png")</pre></details><p class="ezber">Önce hesapla, sonra f-string'e koy.</p></article>
+<article class="kod-kart"><div class="ust-satir"><h3>Ek: benzer cümleleri bulmak</h3><span class="hf">Raporda yok</span></div><p class="kaynak">Raporlarda yok. Projenin kodundan (tutarlılık modülü); "çelişkileri nasıl buluyorsunuz?" sorusu için eklendi.</p><p>Bütün cümle çiftlerine bakmak yerine yalnız anlamca en yakın komşular dil modeline gidiyor.</p><div class="kod-ikili"><div><span class="etk">Projedeki kod</span><pre class="kodblok">V = V / np.linalg.norm(V, axis=1, keepdims=True)   # boyu 1 yap
 S = vektorler @ vektorler.T          # her çiftin benzerliği
 np.fill_diagonal(S, -1.0)            # kendisiyle benzerliği yok say
 komsular = np.argsort(-S, axis=1)[:, :len(KOMSU_ESIKLERI)]</pre></div><div><span class="etk">Sözde kod</span><pre class="kodblok sozde">HER cümleyi bge-m3 ile sayı listesine çevir
